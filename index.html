@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DAJOMS GROUP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #fff; color: #404042; }
+    img { display: block; max-width: 100%; }
+    button { cursor: pointer; border: none; font-family: 'Montserrat', sans-serif; }
+    a { text-decoration: none; color: inherit; }
+    input, textarea, select { font-family: 'Inter', sans-serif; outline: none; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #f3f4f6; }
+    ::-webkit-scrollbar-thumb { background: #D9DCE2; border-radius: 2px; }
+
+    /* ── RESPONSIVE BASE ── */
+    @media (max-width: 1024px) {
+      body { font-size: 14px; }
+    }
+
+    @media (max-width: 768px) {
+      body { font-size: 13px; }
+    }
+
+    @media (max-width: 480px) {
+      body { font-size: 12px; }
+    }
+
+    /* Floating label animation */
+    .label-tag {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 56px;
+      border-radius: 3px 3px 3px 3px;
+      cursor: pointer;
+      transition: width 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
+      overflow: visible;
+      white-space: nowrap;
+      border: none;
+      box-shadow: none;
+      background: transparent !important;
+    }
+    .label-tag:hover { width: 110px; box-shadow: 0 6px 24px rgba(0,0,0,0.15); }
+    .label-tag::before {
+      content: '';
+      position: absolute;
+      top: -8px; left: 50%; transform: translateX(-50%);
+      width: 10px; height: 8px;
+      background: inherit;
+      border-radius: 2px 2px 0 0;
+    }
+    .label-tag::after {
+      content: '';
+      position: absolute;
+      top: -12px; left: 50%; transform: translateX(-50%);
+      width: 2px; height: 12px;
+      background: #ccc;
+    }
+    .label-letter { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; flex-shrink: 0; transition: opacity 0.2s, width 0.2s; }
+    .label-word { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0; width: 0; transition: opacity 0.25s 0.1s, width 0.35s; overflow: hidden; }
+    .label-tag:hover .label-letter { opacity: 0; width: 0; overflow: hidden; font-size: 0; }
+    .label-tag:hover .label-word { opacity: 1; width: 70px; }
+    .label-active { box-shadow: none; }
+
+    /* ── RESPONSIVE MOBILE ── */
+    @media (max-width: 1024px) {
+      header { padding: 0 24px; }
+      nav { gap: 20px; }
+      nav button { font-size: 11px; }
+      section { padding: 60px 24px !important; }
+      h1 { font-size: 40px; }
+      h2 { font-size: 28px; }
+    }
+
+    @media (max-width: 768px) {
+      header { flex-wrap: wrap; height: auto; }
+      nav { width: 100%; flex-direction: row; gap: 8px; margin-top: 8px; }
+      nav button { font-size: 10px; padding: 6px 10px; flex: 1; }
+      
+      .label-tag {
+        position: fixed;
+        right: 12px;
+        bottom: 20px;
+        width: 32px;
+        height: 48px;
+      }
+      .label-tag:hover { width: 90px; }
+      
+      section { padding: 48px 20px !important; }
+      h1 { font-size: 32px; }
+      h2 { font-size: 24px; }
+      .subtitle { font-size: 16px; }
+      .body-text { font-size: 13px; }
+    }
+
+    @media (max-width: 480px) {
+      body { font-family: 'Inter', sans-serif; }
+      
+      header { padding: 8px 12px; }
+      header div { padding: 0; height: auto; display: flex; flex-direction: column; }
+      header div > div:first-child { width: 100%; }
+      header div > div:first-child img { height: 28px; }
+      
+      nav { 
+        width: 100%;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 8px;
+      }
+      nav button { 
+        width: 100%;
+        font-size: 9px;
+        padding: 8px 10px;
+      }
+
+      .label-tag {
+        position: fixed;
+        right: 8px;
+        bottom: 16px;
+        width: 28px;
+        height: 44px;
+      }
+      .label-tag:hover { width: 80px; bottom: 20px; }
+      .label-letter { font-size: 12px; }
+      .label-word { width: 50px; font-size: 9px; }
+
+      section { padding: 36px 16px !important; }
+      
+      h1 { font-size: 24px; margin-bottom: 12px; line-height: 1.15; }
+      h2 { font-size: 20px; margin-bottom: 10px; }
+      h3 { font-size: 13px; }
+      h4 { font-size: 11px; }
+
+      .subtitle { font-size: 14px; margin-bottom: 16px; }
+      .body-text { font-size: 12px; margin-bottom: 10px; line-height: 1.6; }
+      .tagline { font-size: 11px; }
+
+      button { 
+        padding: 10px 14px; 
+        font-size: 11px;
+      }
+
+      input, textarea, select { padding: 10px 10px; font-size: 12px; }
+
+      footer { padding: 32px 16px 20px !important; }
+      footer h4 { font-size: 10px; }
+      footer p { font-size: 11px; }
+    }
+
+    @media (max-width: 360px) {
+      h1 { font-size: 20px; }
+      h2 { font-size: 18px; }
+      section { padding: 28px 12px !important; }
+      button { padding: 8px 10px; font-size: 10px; }
+      .label-tag { width: 24px; height: 40px; }
+      .label-tag:hover { width: 70px; }
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ─── PALETA BASE ──────────────────────────────────────────────────────────────
+const BASE = {
+  carbon: '#404042',
+  carbonLight: '#6b6b6d',
+  grisClaro: '#F3F4F6',
+  grisMedio: '#D9DCE2',
+  blanco: '#FFFFFF',
+};
+
+const ACCENT_SCHEMES = {
+  rosa:  { accent: '#FF81A0', accentDark: '#e06080', label: 'Women',  letter: 'W', bg: '#fff0f4', logoFilter: 'none' },
+  azul:  { accent: '#5B9BD5', accentDark: '#3a7ab5', label: 'Men',    letter: 'M', bg: '#f0f5ff', logoFilter: 'hue-rotate(228deg) saturate(1.1)' },
+  gris:  { accent: '#8C8A86', accentDark: '#6a6864', label: 'Unisex', letter: 'U', bg: '#f4f4f3', logoFilter: 'saturate(0) brightness(0.88)' },
+};
+
+// ─── SHARED COMPONENTS ────────────────────────────────────────────────────────
+const Logo = ({ size = 44, inverted = false, accent }) => (
+  <img
+    src="assets/DAJOMSlogo.png"
+    alt="DAJOMS GROUP"
+    style={{
+      height: size,
+      width: 'auto',
+      filter: inverted
+        ? 'brightness(0) invert(1)'
+        : (accent?.logoFilter || 'none'),
+      transition: 'filter 0.4s ease',
+    }}
+  />
+);
+
+const Btn = ({ children, onClick, variant = 'primary', style = {}, accent }) => {
+  const [hover, setHover] = useState(false);
+  const isPrimary = variant === 'primary';
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        background: isPrimary ? (hover ? accent?.accentDark || '#e06080' : accent?.accent || '#FF81A0') : 'transparent',
+        color: isPrimary ? '#fff' : (hover ? (accent?.accent || '#FF81A0') : BASE.carbon),
+        border: isPrimary ? 'none' : `1.5px solid ${hover ? (accent?.accent || '#FF81A0') : BASE.carbon}`,
+        padding: '14px 32px',
+        borderRadius: 4,
+        fontWeight: 600,
+        fontSize: 14,
+        letterSpacing: '0.06em',
+        fontFamily: 'Montserrat, sans-serif',
+        transition: 'all 0.2s',
+        cursor: 'pointer',
+        ...style,
+      }}
+    >{children}</button>
+  );
+};
+
+const LineaAcento = ({ width = 48, accent, style = {} }) => (
+  <div style={{ width, height: 3, background: accent?.accent || '#FF81A0', borderRadius: 2, ...style }} />
+);
+
+// Photo mapping: link code to photo key
+const PHOTO_MAP = {
+  w1: 'w1', w2: 'w2', w3: 'w3', w4: 'w4',
+  p1: 'p1', p2: 'p2', p3: 'p3', p4: 'p4', p5: 'p5', p6: 'p6',
+  c1: 'c1', c2: 'c2', c3: 'c3', c4: 'c4', c5: 'c5', c6: 'c6',
+};
+
+// Get photo suffix by accent
+const getPhotoSuffix = (accentKey) => {
+  const map = { rosa: 'women_pink', azul: 'men_blue', gris: 'unisex_gray' };
+  return map[accentKey] || 'women_pink';
+};
+
+const PhotoImg = ({ code, width = '100%', height = 280, style = {}, accentKey = 'rosa' }) => {
+  const suffix = getPhotoSuffix(accentKey);
+  const src = `assets/photos/${code}_${suffix}.jpg`;
+  return (
+    <img src={src} alt={code} style={{ width, height, objectFit: 'cover', objectPosition: 'center', borderRadius: 2, display: 'block', ...style }} />
+  );
+};
+
+const ImgPlaceholder = ({ label, width = '100%', height = 280, style = {}, code = null, accentKey = 'rosa' }) => {
+  // If code provided, show real photo; otherwise show placeholder
+  if (code) {
+    return <PhotoImg code={code} width={width} height={height} style={style} accentKey={accentKey} />;
+  }
+  return (
+    <div style={{
+      width, height,
+      background: `repeating-linear-gradient(45deg,${BASE.grisClaro},${BASE.grisClaro} 6px,#e8e9eb 6px,#e8e9eb 12px)`,
+      display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 2, ...style,
+    }}>
+      <span style={{ fontFamily: 'monospace', fontSize: 11, color: BASE.carbonLight, textAlign: 'center', padding: 16, lineHeight: 1.6 }}>{label}</span>
+    </div>
+  );
+};
+
+// ─── FLOATING LABEL SWITCHER ──────────────────────────────────────────────────
+const FloatingLabels = ({ accentKey, setAccentKey }) => {
+  const botonMap = { rosa: 'assets/boton_women.png', azul: 'assets/boton_men.png', gris: 'assets/boton_unisex.png' };
+  
+  return (
+    <div style={{
+      position: 'fixed',
+      right: 0,
+      top: '50%',
+      transform: 'translateY(-50%)',
+      zIndex: 900,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 16,
+      paddingRight: 12,
+      paddingTop: 24,
+    }}>
+      {Object.entries(ACCENT_SCHEMES).map(([key, scheme]) => {
+        const isActive = accentKey === key;
+        return (
+          <div
+            key={key}
+            onClick={() => setAccentKey(key)}
+            title={scheme.label}
+            style={{
+              cursor: 'pointer',
+              width: 72,
+              height: 110,
+              borderRadius: 4,
+              overflow: 'hidden',
+              border: 'none',
+              background: 'transparent',
+              boxShadow: isActive 
+                ? `0 8px 24px rgba(0,0,0,0.2)` 
+                : '0 4px 16px rgba(0,0,0,0.15)',
+              transition: 'all 0.25s cubic-bezier(0.34,1.56,0.64,1)',
+              transform: isActive ? 'scale(1.12) translateX(-8px)' : 'scale(1)',
+            }}
+          >
+            <img src={botonMap[key]} alt={scheme.label} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+// ─── NAV ──────────────────────────────────────────────────────────────────────
+const Nav = ({ pagina, setPagina, accent }) => {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  const links = [
+    { id: 'home', label: 'Inicio' },
+    { id: 'productos', label: 'Productos' },
+    { id: 'nosotros', label: 'Nosotros' },
+    { id: 'contacto', label: 'Contacto' },
+  ];
+
+  const handleNav = (id) => { setPagina(id); window.scrollTo(0,0); };
+
+  return (
+    <header style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 800,
+      background: scrolled ? 'rgba(255,255,255,0.97)' : '#fff',
+      borderBottom: `1px solid ${scrolled ? BASE.grisMedio : 'transparent'}`,
+      backdropFilter: scrolled ? 'blur(8px)' : 'none',
+      transition: 'all 0.3s',
+    }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 40px', height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ cursor: 'pointer' }} onClick={() => handleNav('home')}><Logo size={44} accent={accent} /></div>
+        <nav style={{ display: 'flex', gap: 36, alignItems: 'center' }}>
+          {links.map(l => (
+            <button key={l.id} onClick={() => handleNav(l.id)} style={{
+              background: 'none', border: 'none',
+              fontFamily: 'Montserrat, sans-serif', fontSize: 12, fontWeight: 700,
+              letterSpacing: '0.09em', textTransform: 'uppercase',
+              color: pagina === l.id ? accent.accent : BASE.carbon,
+              borderBottom: pagina === l.id ? `2px solid ${accent.accent}` : '2px solid transparent',
+              padding: '4px 0', transition: 'all 0.2s', cursor: 'pointer',
+            }}>{l.label}</button>
+          ))}
+          <Btn onClick={() => handleNav('contacto')} style={{ padding: '10px 22px', fontSize: 12 }} accent={accent}>Solicitar cotización</Btn>
+        </nav>
+      </div>
+    </header>
+  );
+};
+
+// ─── FOOTER ───────────────────────────────────────────────────────────────────
+const Footer = ({ setPagina, accent }) => (
+  <footer style={{ background: BASE.carbon, color: '#fff', padding: '64px 40px 32px' }}>
+    <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
+        <div>
+          <Logo size={40} inverted />
+          <p style={{ fontSize: 13, lineHeight: 1.9, color: 'rgba(255,255,255,0.55)', maxWidth: 280, marginTop: 20 }}>
+            Etiquetas para ropa y soluciones de identidad textil. La firma textil que da identidad a cada prenda.
+          </p>
+        </div>
+        <div>
+          <h4 style={{ fontFamily: 'Montserrat', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Productos</h4>
+          {['Etiquetas tejidas','Etiquetas impresas','Etiquetas satinadas','Hang Tags','Heat Transfers','Personalizadas'].map(p => (
+            <p key={p} style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 9, cursor: 'pointer' }}>{p}</p>
+          ))}
+        </div>
+        <div>
+          <h4 style={{ fontFamily: 'Montserrat', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Empresa</h4>
+          {['Inicio','Productos','Nosotros','Contacto'].map(p => (
+            <p key={p} style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 9, cursor: 'pointer' }}>{p}</p>
+          ))}
+        </div>
+        <div>
+          <h4 style={{ fontFamily: 'Montserrat', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Contacto</h4>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 9 }}>contacto@dajoms.com</p>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 9 }}>+52 (55) 0000-0000</p>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 18 }}>Lun–Vie 9:00–18:00</p>
+          <div style={{ background: '#25D366', borderRadius: 4, padding: '10px 18px', fontSize: 12, fontFamily: 'Montserrat', fontWeight: 700, display: 'inline-block', cursor: 'pointer', color: '#fff' }}>WhatsApp</div>
+        </div>
+      </div>
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 22, display: 'flex', justifyContent: 'space-between' }}>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>© 2026 DAJOMS GROUP. Todos los derechos reservados.</p>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>Identidad textil para marcas que cuidan cada detalle.</p>
+      </div>
+    </div>
+  </footer>
+);
+
+// ─── HOME ─────────────────────────────────────────────────────────────────────
+const PaginaHome = ({ setPagina, accent, accentKey }) => {
+  const productos = [
+    { nombre: 'Etiquetas tejidas', desc: 'Alta definición en hilo jacquard' },
+    { nombre: 'Etiquetas impresas', desc: 'Nitidez y versatilidad total' },
+    { nombre: 'Hang Tags', desc: 'Presentación de colección' },
+    { nombre: 'Heat Transfers', desc: 'Sin costura, acabado premium' },
+  ];
+  const clientes = ['Cuidado con el Perro','Mala Hierba','KIDS','Coppel','Marca E','Marca F'];
+  const valores = [
+    { n:'01', t:'Precisión técnica', d:'Cada etiqueta se produce con estándares que garantizan consistencia desde el primer lote hasta el último.' },
+    { n:'02', t:'Identidad de marca', d:'Convertimos los detalles de tu prenda en una herramienta de posicionamiento que comunica profesionalismo.' },
+    { n:'03', t:'Atención comercial', d:'Acompañamos cada proyecto con comunicación clara, plazos definidos y disposición total para el detalle.' },
+  ];
+
+  return (
+    <div>
+      {/* HERO */}
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: 72, background: BASE.blanco }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+          <div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: BASE.grisClaro, borderRadius: 40, padding: '8px 18px', marginBottom: 32 }}>
+              <div style={{ width: 7, height: 7, borderRadius: '50%', background: accent.accent }} />
+              <span style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: BASE.carbonLight }}>Identidad textil profesional</span>
+            </div>
+            <h1 style={{ fontFamily: 'Montserrat', fontSize: 50, fontWeight: 800, lineHeight: 1.1, color: BASE.carbon, marginBottom: 24, textWrap: 'pretty' }}>
+              Etiquetas que elevan la identidad de tu marca
+            </h1>
+            <LineaAcento accent={accent} style={{ marginBottom: 28 }} />
+            <p style={{ fontSize: 16, lineHeight: 1.85, color: BASE.carbonLight, marginBottom: 40, maxWidth: 460 }}>
+              En DAJOMS GROUP desarrollamos etiquetas para ropa y soluciones de identidad textil para marcas, fabricantes y empresas que buscan calidad, precisión y una presentación impecable.
+            </p>
+            <div style={{ display: 'flex', gap: 16 }}>
+              <Btn onClick={() => setPagina('contacto')} accent={accent}>Solicitar cotización</Btn>
+              <Btn variant="secondary" onClick={() => setPagina('productos')} accent={accent}>Ver catálogo</Btn>
+            </div>
+          </div>
+          <div style={{ position: 'relative' }}>
+            <ImgPlaceholder code="w1" height={460} accentKey={accentKey} style={{ borderRadius: 4 }} />
+            <div style={{ position: 'absolute', bottom: -20, left: -20, background: '#fff', border: `1px solid ${BASE.grisMedio}`, borderRadius: 4, padding: '18px 24px', boxShadow: '0 8px 32px rgba(0,0,0,0.07)' }}>
+              <div style={{ fontFamily: 'Montserrat', fontSize: 26, fontWeight: 800, color: BASE.carbon }}>+500</div>
+              <div style={{ fontFamily: 'Inter', fontSize: 12, color: BASE.carbonLight, marginTop: 2 }}>marcas atendidas</div>
+            </div>
+            <div style={{ position: 'absolute', top: 20, right: -20, background: accent.accent, borderRadius: 4, padding: '14px 18px' }}>
+              <div style={{ fontFamily: 'Montserrat', fontSize: 20, fontWeight: 800, color: '#fff' }}>15+</div>
+              <div style={{ fontFamily: 'Inter', fontSize: 11, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>años de experiencia</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CLIENTES */}
+      <section style={{ background: BASE.grisClaro, padding: '36px 40px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <p style={{ textAlign: 'center', fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: BASE.carbonLight, marginBottom: 24 }}>Marcas que confían en DAJOMS GROUP</p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 48, flexWrap: 'wrap', alignItems: 'center' }}>
+            {clientes.map(c => <div key={c} style={{ fontFamily: 'Montserrat', fontSize: 13, fontWeight: 700, color: BASE.grisMedio, letterSpacing: '0.07em' }}>{c}</div>)}
+          </div>
+        </div>
+      </section>
+
+      {/* PROPUESTA DE VALOR */}
+      <section style={{ padding: '96px 40px', background: BASE.blanco }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 60 }}>
+            <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 14 }}>Por qué elegirnos</p>
+            <h2 style={{ fontFamily: 'Montserrat', fontSize: 34, fontWeight: 800, color: BASE.carbon }}>Soluciones textiles con precisión,<br />presencia y valor de marca</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 36 }}>
+            {valores.map((v,i) => (
+              <div key={i} style={{ padding: '36px 32px', border: `1px solid ${BASE.grisMedio}`, borderRadius: 4, borderTop: `3px solid ${accent.accent}` }}>
+                <div style={{ fontFamily: 'Montserrat', fontSize: 28, fontWeight: 800, color: BASE.grisClaro, marginBottom: 16 }}>{v.n}</div>
+                <h3 style={{ fontFamily: 'Montserrat', fontSize: 17, fontWeight: 700, color: BASE.carbon, marginBottom: 12 }}>{v.t}</h3>
+                <p style={{ fontSize: 14, lineHeight: 1.8, color: BASE.carbonLight }}>{v.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PRODUCTOS PREVIEW */}
+      <section style={{ padding: '96px 40px', background: BASE.grisClaro }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 52 }}>
+            <div>
+              <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 10 }}>Líneas de producto</p>
+              <h2 style={{ fontFamily: 'Montserrat', fontSize: 34, fontWeight: 800, color: BASE.carbon }}>Diseñadas para presentar<br />mejor cada prenda</h2>
+            </div>
+            <Btn variant="secondary" onClick={() => setPagina('productos')} accent={accent}>Ver todos los productos</Btn>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20 }}>
+            {productos.map((p,i) => (
+              <div key={i} style={{ background: '#fff', borderRadius: 4, overflow: 'hidden', cursor: 'pointer', border: `1px solid ${BASE.grisMedio}` }} onClick={() => setPagina('productos')}>
+                <ImgPlaceholder code={`p${i+1}`} height={180} accentKey={accentKey} style={{ borderRadius: 0 }} />
+                <div style={{ padding: '18px 18px' }}>
+                  <h4 style={{ fontFamily: 'Montserrat', fontSize: 14, fontWeight: 700, color: BASE.carbon, marginBottom: 6 }}>{p.nombre}</h4>
+                  <p style={{ fontSize: 12, color: BASE.carbonLight, marginBottom: 14 }}>{p.desc}</p>
+                  <span style={{ fontFamily: 'Montserrat', fontSize: 11, fontWeight: 700, color: accent.accent, letterSpacing: '0.05em' }}>Ver detalle →</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* INSTITUCIONAL */}
+      <section style={{ padding: '96px 40px', background: BASE.carbon }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+          <div>
+            <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Nuestra empresa</p>
+            <h2 style={{ fontFamily: 'Montserrat', fontSize: 32, fontWeight: 800, color: '#fff', lineHeight: 1.2, marginBottom: 22 }}>Más que etiquetas: identidad textil para marcas que cuidan cada detalle</h2>
+            <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.6)', marginBottom: 32 }}>
+              Combinamos ejecución confiable, atención profesional y una estética limpia para crear soluciones textiles que proyectan orden, calidad e identidad de marca.
+            </p>
+            <Btn onClick={() => setPagina('nosotros')} accent={accent}>Conocer más</Btn>
+          </div>
+          <ImgPlaceholder code="w2" height={380} accentKey={accentKey} style={{ borderRadius: 4, opacity: 0.85 }} />
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section style={{ padding: '80px 40px', background: BASE.blanco, textAlign: 'center' }}>
+        <div style={{ maxWidth: 560, margin: '0 auto' }}>
+          <h2 style={{ fontFamily: 'Montserrat', fontSize: 30, fontWeight: 800, color: BASE.carbon, marginBottom: 14 }}>Conversemos sobre la presentación de tu marca</h2>
+          <p style={{ fontSize: 15, color: BASE.carbonLight, marginBottom: 32, lineHeight: 1.8 }}>Nuestro equipo está listo para asesorarte y desarrollar la propuesta que mejor se adapte a tu marca.</p>
+          <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
+            <Btn onClick={() => setPagina('contacto')} accent={accent}>Solicitar cotización</Btn>
+            <Btn variant="secondary" onClick={() => setPagina('contacto')} accent={accent}>Hablar con un asesor</Btn>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// ─── PRODUCTOS ────────────────────────────────────────────────────────────────
+const PaginaProductos = ({ setPagina, accent, accentKey }) => {
+  const cats = [
+    { nombre: 'Etiquetas tejidas', desc: 'Producidas en telar jacquard de alta precisión. Disponibles en poliéster y nylon. Cortes: recto, inglés y central. Pliegues: enrollado, central, lateral y manhattan. Ideales para marcas que buscan textura y durabilidad.' },
+    { nombre: 'Etiquetas impresas', desc: 'Impresión digital y flexográfica sobre tafetán, satín y algodón. Resolución hasta 1200 dpi. Tintas resistentes al lavado. Colores CMYK + pantones especiales. Personalizadas en tamaño, forma y contenido.' },
+    { nombre: 'Etiquetas satinadas', desc: 'Sustrato de poliéster satinado brillante. Tacto suave y elegante. Impresión de alta resolución con colores vivos. Perfectas para moda, lencería y prendas de alto valor percibido.' },
+    { nombre: 'Hang Tags', desc: 'Tarjetas de presentación con acabados premium: barniz UV, laminado, troquelado y papel especial 350gsm. Incluyen perforación para argolla y cordón. Formato estándar y personalizado. Diseño editorial alineado con la colección.' },
+    { nombre: 'Heat Transfers', desc: 'Transferencia directa sobre tejido sin costura. Disponible en vinil, sublimación y serigrafía. Aplicación con prensa de calor. Acabado limpio, lavable y resistente. Ideal para prendas deportivas y técnicas.' },
+    { nombre: 'Soluciones personalizadas', desc: 'Desarrollamos proyectos especiales a la medida: combinaciones de materiales, etiquetas con relieve, metálicas, impresas en cuero sintético, aplicaciones especiales y formatos únicos. Consulta disponibilidad.' },
+  ];
+
+  return (
+    <div>
+      <section style={{ background: BASE.carbon, padding: '140px 40px 72px', textAlign: 'center' }}>
+        <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Nuestras líneas</p>
+        <h1 style={{ fontFamily: 'Montserrat', fontSize: 44, fontWeight: 800, color: '#fff', marginBottom: 18 }}>Líneas de producto DAJOMS</h1>
+        <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.55)', maxWidth: 500, margin: '0 auto' }}>Cada línea está pensada para resolver una necesidad específica de presentación textil, con materiales seleccionados y procesos de calidad controlada.</p>
+      </section>
+
+      <section style={{ padding: '72px 40px', background: BASE.blanco }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 28 }}>
+            {cats.map((cat,i) => (
+              <div key={i} style={{ border: `1px solid ${BASE.grisMedio}`, borderRadius: 4, overflow: 'hidden' }}>
+                <ImgPlaceholder code={`c${i+1}`} height={200} accentKey={accentKey} style={{ borderRadius: 0 }} />
+                <div style={{ padding: '24px 24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                    <LineaAcento width={24} accent={accent} />
+                    <h3 style={{ fontFamily: 'Montserrat', fontSize: 15, fontWeight: 700, color: BASE.carbon }}>{cat.nombre}</h3>
+                  </div>
+                  <p style={{ fontSize: 13, lineHeight: 1.8, color: BASE.carbonLight, marginBottom: 20 }}>{cat.desc}</p>
+                  <Btn onClick={() => setPagina('contacto')} style={{ padding: '10px 18px', fontSize: 12 }} accent={accent}>Solicitar cotización</Btn>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '72px 40px', background: BASE.grisClaro, textAlign: 'center' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 12 }}>Cómo trabajamos</p>
+          <h2 style={{ fontFamily: 'Montserrat', fontSize: 30, fontWeight: 800, color: BASE.carbon, marginBottom: 48 }}>Del concepto a la entrega</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
+            {['Consulta y cotización','Diseño y aprobación','Producción controlada','Entrega y seguimiento'].map((paso,i) => (
+              <div key={i}>
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: '#fff', border: `2px solid ${accent.accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontFamily: 'Montserrat', fontWeight: 800, fontSize: 16, color: accent.accent }}>{i+1}</div>
+                <h4 style={{ fontFamily: 'Montserrat', fontSize: 13, fontWeight: 700, color: BASE.carbon }}>{paso}</h4>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '72px 40px', background: BASE.blanco, textAlign: 'center' }}>
+        <h2 style={{ fontFamily: 'Montserrat', fontSize: 28, fontWeight: 800, color: BASE.carbon, marginBottom: 14 }}>¿No encuentras lo que buscas?</h2>
+        <p style={{ fontSize: 14, color: BASE.carbonLight, marginBottom: 28 }}>Desarrollamos soluciones a la medida de cada proyecto y presupuesto.</p>
+        <Btn onClick={() => setPagina('contacto')} accent={accent}>Hablar con un asesor</Btn>
+      </section>
+    </div>
+  );
+};
+
+// ─── NOSOTROS ─────────────────────────────────────────────────────────────────
+const PaginaNosotros = ({ setPagina, accent, accentKey }) => {
+  const valores = [
+    { t: 'Precisión', d: 'Cada proceso garantiza consistencia y calidad en cada lote de producción.' },
+    { t: 'Compromiso', d: 'Plazos claros, comunicación directa y disposición total para resolver cada detalle.' },
+    { t: 'Identidad', d: 'Una etiqueta no es un accesorio — es la firma visual de tu marca en cada prenda.' },
+  ];
+
+  return (
+    <div>
+      <section style={{ background: BASE.blanco, padding: '140px 40px 72px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+          <div>
+            <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Nuestra historia</p>
+            <h1 style={{ fontFamily: 'Montserrat', fontSize: 40, fontWeight: 800, color: BASE.carbon, lineHeight: 1.15, marginBottom: 20 }}>Más que etiquetas: identidad textil para marcas que cuidan cada detalle</h1>
+            <LineaAcento accent={accent} style={{ marginBottom: 24 }} />
+            <p style={{ fontSize: 15, lineHeight: 1.9, color: BASE.carbonLight }}>DAJOMS GROUP nació de la convicción de que la presentación de una prenda es tan importante como su confección. Desde nuestros inicios, nos especializamos en entender las necesidades específicas de cada marca para ofrecer soluciones textiles que refuercen su identidad desde el primer contacto visual.</p>
+          </div>
+          <ImgPlaceholder code="w3" height={420} accentKey={accentKey} style={{ borderRadius: 4 }} />
+        </div>
+      </section>
+
+      <section style={{ padding: '72px 40px', background: BASE.grisClaro }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 10 }}>Lo que nos define</p>
+            <h2 style={{ fontFamily: 'Montserrat', fontSize: 30, fontWeight: 800, color: BASE.carbon }}>Nuestros valores de trabajo</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 28 }}>
+            {valores.map((v,i) => (
+              <div key={i} style={{ background: '#fff', padding: '36px 28px', borderRadius: 4, borderBottom: `3px solid ${accent.accent}` }}>
+                <h3 style={{ fontFamily: 'Montserrat', fontSize: 19, fontWeight: 800, color: BASE.carbon, marginBottom: 14 }}>{v.t}</h3>
+                <p style={{ fontSize: 14, lineHeight: 1.8, color: BASE.carbonLight }}>{v.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '72px 40px', background: BASE.blanco }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+          <ImgPlaceholder code="w4" height={400} accentKey={accentKey} style={{ borderRadius: 4 }} />
+          <div>
+            <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Proceso de trabajo</p>
+            <h2 style={{ fontFamily: 'Montserrat', fontSize: 28, fontWeight: 800, color: BASE.carbon, marginBottom: 28, lineHeight: 1.2 }}>Calidad garantizada en cada etapa</h2>
+            {['Consulta inicial y análisis de necesidades','Desarrollo de arte y aprobación de muestra','Producción con control de calidad continuo','Revisión final y entrega puntual','Seguimiento post-entrega y soporte comercial'].map((paso,i) => (
+              <div key={i} style={{ display: 'flex', gap: 18, marginBottom: 18, alignItems: 'flex-start' }}>
+                <div style={{ width: 26, height: 26, minWidth: 26, borderRadius: '50%', background: BASE.grisClaro, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Montserrat', fontWeight: 800, fontSize: 11, color: accent.accent }}>{i+1}</div>
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: BASE.carbon, paddingTop: 3 }}>{paso}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '72px 40px', background: BASE.carbon, textAlign: 'center' }}>
+        <div style={{ maxWidth: 880, margin: '0 auto' }}>
+          <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 22 }}>En números</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 40, marginBottom: 48 }}>
+            {[{n:'+500',l:'Marcas atendidas'},{n:'15+',l:'Años de experiencia'},{n:'6',l:'Líneas de producto'},{n:'100%',l:'Compromiso con calidad'}].map((s,i) => (
+              <div key={i}>
+                <div style={{ fontFamily: 'Montserrat', fontSize: 36, fontWeight: 800, color: '#fff' }}>{s.n}</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 6 }}>{s.l}</div>
+              </div>
+            ))}
+          </div>
+          <Btn onClick={() => setPagina('contacto')} accent={accent}>Iniciar una conversación comercial</Btn>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// ─── CONTACTO ─────────────────────────────────────────────────────────────────
+const PaginaContacto = ({ accent }) => {
+  const [form, setForm] = useState({ nombre:'', empresa:'', email:'', telefono:'', producto:'', mensaje:'' });
+  const [enviado, setEnviado] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  const handleSubmit = e => {
+    e.preventDefault();
+    const err = {};
+    if (!form.nombre.trim()) err.nombre = true;
+    if (!form.email.includes('@')) err.email = true;
+    if (!form.mensaje.trim()) err.mensaje = true;
+    if (Object.keys(err).length) { setErrors(err); return; }
+    setEnviado(true);
+  };
+
+  const inp = (name) => ({
+    width: '100%', padding: '13px 14px',
+    border: `1.5px solid ${errors[name] ? accent.accent : BASE.grisMedio}`,
+    borderRadius: 4, fontSize: 14, color: BASE.carbon, background: '#fff', transition: 'border-color 0.2s',
+  });
+  const lbl = { fontFamily: 'Montserrat', fontSize: 11, fontWeight: 600, color: BASE.carbon, letterSpacing: '0.05em', display: 'block', marginBottom: 7 };
+
+  return (
+    <div>
+      <section style={{ background: BASE.grisClaro, padding: '140px 40px 56px', textAlign: 'center' }}>
+        <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 14 }}>Estamos aquí para ayudarte</p>
+        <h1 style={{ fontFamily: 'Montserrat', fontSize: 40, fontWeight: 800, color: BASE.carbon, marginBottom: 14 }}>Conversemos sobre la presentación de tu marca</h1>
+        <p style={{ fontSize: 15, color: BASE.carbonLight, maxWidth: 440, margin: '0 auto' }}>Cuéntanos tu proyecto y en breve un asesor se pondrá en contacto contigo.</p>
+      </section>
+
+      <section style={{ padding: '72px 40px', background: BASE.blanco }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.7fr', gap: 64 }}>
+          <div>
+            <h2 style={{ fontFamily: 'Montserrat', fontSize: 20, fontWeight: 800, color: BASE.carbon, marginBottom: 28 }}>Información de contacto</h2>
+            {[{ t:'Correo electrónico', v:'contacto@dajoms.com' },{ t:'Teléfono', v:'+52 (55) 0000-0000' },{ t:'Horario de atención', v:'Lunes a Viernes\n9:00 – 18:00 hrs' }].map((item,i) => (
+              <div key={i} style={{ marginBottom: 24, paddingBottom: 24, borderBottom: i < 2 ? `1px solid ${BASE.grisClaro}` : 'none' }}>
+                <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: accent.accent, marginBottom: 7 }}>{item.t}</p>
+                <p style={{ fontSize: 14, color: BASE.carbon, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{item.v}</p>
+              </div>
+            ))}
+            <div style={{ background: '#25D366', borderRadius: 4, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', marginTop: 8 }}>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#fff', fontSize: 14 }}>W</div>
+              <div>
+                <p style={{ fontFamily: 'Montserrat', fontSize: 12, fontWeight: 700, color: '#fff' }}>Atención por WhatsApp</p>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Respuesta rápida</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            {enviado ? (
+              <div style={{ textAlign: 'center', padding: '56px 36px', border: `2px solid ${accent.accent}`, borderRadius: 4 }}>
+                <div style={{ width: 56, height: 56, borderRadius: '50%', background: accent.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: 24, color: '#fff' }}>✓</div>
+                <h3 style={{ fontFamily: 'Montserrat', fontSize: 20, fontWeight: 800, color: BASE.carbon, marginBottom: 10 }}>¡Mensaje enviado!</h3>
+                <p style={{ fontSize: 14, color: BASE.carbonLight }}>Nos pondremos en contacto a la brevedad. Gracias por tu interés en DAJOMS GROUP.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} noValidate>
+                <h2 style={{ fontFamily: 'Montserrat', fontSize: 20, fontWeight: 800, color: BASE.carbon, marginBottom: 28 }}>Solicitar cotización</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginBottom: 18 }}>
+                  <div><label style={lbl}>Nombre completo *</label><input name="nombre" value={form.nombre} onChange={handleChange} style={inp('nombre')} placeholder="Tu nombre" /></div>
+                  <div><label style={lbl}>Empresa / Marca</label><input name="empresa" value={form.empresa} onChange={handleChange} style={inp('empresa')} placeholder="Nombre de tu empresa" /></div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginBottom: 18 }}>
+                  <div><label style={lbl}>Correo electrónico *</label><input name="email" type="email" value={form.email} onChange={handleChange} style={inp('email')} placeholder="tu@correo.com" /></div>
+                  <div><label style={lbl}>Teléfono</label><input name="telefono" value={form.telefono} onChange={handleChange} style={inp('telefono')} placeholder="+52 55 0000 0000" /></div>
+                </div>
+                <div style={{ marginBottom: 18 }}>
+                  <label style={lbl}>Producto de interés</label>
+                  <select name="producto" value={form.producto} onChange={handleChange} style={{ ...inp('producto'), appearance: 'none' }}>
+                    <option value="">Selecciona una opción</option>
+                    {['Etiquetas tejidas','Etiquetas impresas','Etiquetas satinadas','Hang Tags','Heat Transfers','Solución personalizada'].map(o => <option key={o}>{o}</option>)}
+                  </select>
+                </div>
+                <div style={{ marginBottom: 28 }}>
+                  <label style={lbl}>Cuéntanos tu proyecto *</label>
+                  <textarea name="mensaje" value={form.mensaje} onChange={handleChange} style={{ ...inp('mensaje'), minHeight: 110, resize: 'vertical' }} placeholder="Describe tu necesidad: tipo de prenda, cantidad estimada, especificaciones..." />
+                </div>
+                <Btn style={{ width: '100%', padding: '15px', fontSize: 14 }} accent={accent}>Enviar mensaje</Btn>
+                <p style={{ fontSize: 11, color: BASE.carbonLight, marginTop: 10, textAlign: 'center' }}>* Campos requeridos. Tu información es confidencial.</p>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// ─── APP ──────────────────────────────────────────────────────────────────────
+const App = () => {
+  const [pagina, setPaginaRaw] = useState(() => localStorage.getItem('dajoms_page') || 'home');
+  const [accentKey, setAccentKeyRaw] = useState(() => localStorage.getItem('dajoms_accent') || 'rosa');
+  const [tweaksVisible, setTweaksVisible] = useState(false);
+
+  const TWEAK_DEFAULS = /*EDITMODE-BEGIN*/{
+    "accentColor": "#8C8A86",
+    "heroSize": 50,
+    "showClientes": true
+  }/*EDITMODE-END*/;
+
+  const accent = ACCENT_SCHEMES[accentKey] || ACCENT_SCHEMES.rosa;
+
+  const setPagina = (p) => { localStorage.setItem('dajoms_page', p); setPaginaRaw(p); window.scrollTo({ top: 0 }); };
+  const setAccentKey = (k) => {
+    localStorage.setItem('dajoms_accent', k);
+    setAccentKeyRaw(k);
+    const s = ACCENT_SCHEMES[k];
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { accentColor: s.accent } }, '*');
+  };
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.data?.type === '__activate_edit_mode') setTweaksVisible(true);
+      if (e.data?.type === '__deactivate_edit_mode') setTweaksVisible(false);
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
+  const renderPage = () => {
+    switch(pagina) {
+      case 'home': return <PaginaHome setPagina={setPagina} accent={accent} accentKey={accentKey} />;
+      case 'productos': return <PaginaProductos setPagina={setPagina} accent={accent} accentKey={accentKey} />;
+      case 'nosotros': return <PaginaNosotros setPagina={setPagina} accent={accent} accentKey={accentKey} />;
+      case 'contacto': return <PaginaContacto accent={accent} />;
+      default: return <PaginaHome setPagina={setPagina} accent={accent} accentKey={accentKey} />;
+    }
+  };
+
+  return (
+    <div style={{ minHeight: '100vh' }}>
+      <Nav pagina={pagina} setPagina={setPagina} accent={accent} />
+      <FloatingLabels accentKey={accentKey} setAccentKey={setAccentKey} />
+      <main>{renderPage()}</main>
+      <Footer setPagina={setPagina} accent={accent} />
+
+      {/* TWEAKS */}
+      {tweaksVisible && (
+        <div style={{ position:'fixed', bottom:24, right:80, background:'#fff', border:`1px solid ${BASE.grisMedio}`, borderRadius:8, padding:24, boxShadow:'0 8px 40px rgba(0,0,0,0.12)', zIndex:9999, width:240 }}>
+          <h3 style={{ fontFamily:'Montserrat', fontSize:12, fontWeight:700, color:BASE.carbon, marginBottom:18, letterSpacing:'0.06em' }}>Tweaks</h3>
+          <p style={{ fontFamily:'Montserrat', fontSize:10, fontWeight:600, color:BASE.carbonLight, textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:10 }}>Color acento</p>
+          <div style={{ display:'flex', gap:8 }}>
+            {Object.entries(ACCENT_SCHEMES).map(([key, s]) => (
+              <div key={key} onClick={() => setAccentKey(key)} title={s.label} style={{ width:32, height:32, borderRadius:'50%', background:s.accent, cursor:'pointer', border: accentKey===key ? `3px solid ${BASE.carbon}` : '3px solid transparent', transition:'border 0.15s' }} />
+            ))}
+          </div>
+          <p style={{ fontFamily:'Montserrat', fontSize:10, marginTop:16, color:BASE.carbonLight }}>O usa las etiquetas W/M/U flotantes a la derecha.</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

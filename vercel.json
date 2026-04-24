@@ -1,0 +1,15 @@
+{
+  "buildCommand": "echo 'No build needed'",
+  "devCommand": "python -m http.server 8000",
+  "outputDirectory": ".",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {},
+  "git": {
+    "deploymentEnabled": true
+  }
+}

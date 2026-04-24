@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DAJOMS GROUP — Tarjetas de Presentación</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #1a1a1a;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 40px 0 80px;
+    }
+
+    /* ── Controls ── */
+    .controls {
+      text-align: center;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .controls label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+    .controls button {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7);
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .controls button:hover, .controls button.active {
+      background: #FF81A0;
+      border-color: #FF81A0;
+      color: #fff;
+    }
+    .controls .print-btn {
+      background: #FF81A0;
+      border-color: #FF81A0;
+      color: #fff;
+    }
+
+    /* ── Section titles ── */
+    .section-title {
+      text-align: center;
+      margin: 48px 0 28px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .section-title span {
+      color: #FF81A0;
+    }
+
+    /* ── Card wrapper ── */
+    .cards-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      padding: 0 32px;
+    }
+
+    .card-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-person {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .card-pair {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* ── La tarjeta base ── */
+    /* Medidas reales: 85mm x 55mm → usamos 340px x 220px (escala ×4) */
+    .card {
+      width: 340px;
+      height: 215px;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.34,1.2,0.64,1), box-shadow 0.3s;
+      transform-style: preserve-3d;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .card:hover { transform: scale(1.03) translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+
+    .card-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      text-align: center;
+    }
+
+    /* ─── FRENTE — Versión Manager (oscura) ─── */
+    .front-manager {
+      background: #FFFFFF;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 30px 22px;
+    }
+    .front-manager .top-accent {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: #FF81A0;
+    }
+    .front-manager .bottom-accent {
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 60px; height: 60px;
+      background: #FF81A0;
+      border-radius: 60px 0 0 0;
+      opacity: 0.12;
+    }
+    .front-manager .logo-area img { height: 30px; }
+    .front-manager .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 10px;
+      color: #aaa;
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+
+    /* ─── FRENTE — Versión Ventas (rosa) ─── */
+    .front-ventas {
+      background: #404042;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 30px 22px;
+    }
+    .front-ventas .corner-tl {
+      position: absolute;
+      top: 0; left: 0;
+      width: 80px; height: 80px;
+      background: #FF81A0;
+      border-radius: 0 0 80px 0;
+      opacity: 0.15;
+    }
+    .front-ventas .side-line {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: #FF81A0;
+    }
+    .front-ventas .logo-area img { height: 28px; filter: brightness(0) invert(1); }
+    .front-ventas .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+
+    /* ─── REVERSO — compartido ─── */
+    .back-card {
+      background: #404042;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 26px 30px;
+      position: relative;
+    }
+    .back-card.light {
+      background: #FFFFFF;
+    }
+    .back-accent-line {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: #FF81A0;
+    }
+    .back-corner {
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 48px; height: 48px;
+      background: #FF81A0;
+      border-radius: 48px 0 0 0;
+      opacity: 0.2;
+    }
+    .back-nombre {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+    .back-nombre.dark { color: #404042; }
+    .back-cargo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #FF81A0;
+      margin-bottom: 18px;
+    }
+    .back-info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .back-icon {
+      width: 14px; height: 14px;
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+    .back-info-text {
+      font-size: 10px;
+      color: rgba(255,255,255,0.65);
+      font-family: 'Inter', sans-serif;
+    }
+    .back-info-text.dark { color: rgba(64,64,66,0.65); }
+    .back-empresa {
+      position: absolute;
+      bottom: 18px; right: 20px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.2);
+      text-transform: uppercase;
+    }
+    .back-empresa.dark { color: rgba(64,64,66,0.2); }
+    .back-divider {
+      width: 32px; height: 2px;
+      background: #FF81A0;
+      margin-bottom: 14px;
+      border-radius: 1px;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .controls { display: none; }
+      .section-title { color: #aaa; }
+      .card { box-shadow: 0 0 0 1px #e8e8e8; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="controls">
+  <label>Vista:</label>
+  <button class="active" onclick="setView('ambos')">Frente + Reverso</button>
+  <button onclick="setView('frente')">Solo Frente</button>
+  <button onclick="setView('reverso')">Solo Reverso</button>
+  <span style="width:1px;height:20px;background:rgba(255,255,255,0.15);display:inline-block;margin:0 4px;"></span>
+  <button class="print-btn" onclick="window.print()">Imprimir / PDF</button>
+  <button style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);padding:8px 18px;border-radius:4px;font-family:Montserrat,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;cursor:pointer;" onclick="window.location.href='DAJOMS Carta de Presentacion.html'">← Carta</button>
+</div>
+
+<!-- ══════════════════════════ MANAGERS ══════════════════════════ -->
+<div class="section-title">Business Managers — <span>Directivos</span></div>
+<div class="cards-row" id="managers-row">
+
+  <!-- DANIELA REYES -->
+  <div class="card-unit">
+    <div class="card-pair" id="pair-daniela">
+      <!-- FRENTE -->
+      <div class="card" title="Frente — Daniela Reyes">
+        <div class="front-manager">
+          <div class="top-accent"></div>
+          <div class="bottom-accent"></div>
+          <div class="logo-area">
+            <img src="assets/DAJOMSlogo.png" alt="DAJOMS GROUP" />
+            <p class="tagline">Etiquetas para ropa con identidad y precisión</p>
+          </div>
+          <div>
+            <div style="width:28px;height:2px;background:#FF81A0;border-radius:1px;margin-bottom:8px;"></div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#aaa;">Business Manager</div>
+          </div>
+        </div>
+      </div>
+      <!-- REVERSO -->
+      <div class="card" title="Reverso — Daniela Reyes">
+        <div class="back-card light">
+          <div class="back-accent-line"></div>
+          <div class="back-corner"></div>
+          <div class="back-nombre dark">Daniela Reyes<br/>Cázares</div>
+          <div class="back-cargo">Business Manager</div>
+          <div class="back-divider"></div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="#404042" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span class="back-info-text dark">+52 (55) 0000-0000</span>
+          </div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="#404042" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span class="back-info-text dark">daniela@dajoms.com</span>
+          </div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="#404042" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="back-info-text dark">www.dajoms.com</span>
+          </div>
+          <div class="back-empresa dark">DAJOMS GROUP</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Daniela Reyes Cázares · Business Manager</div>
+  </div>
+
+  <!-- MIGUEL MARTÍNEZ -->
+  <div class="card-unit">
+    <div class="card-pair" id="pair-miguel">
+      <!-- FRENTE -->
+      <div class="card" title="Frente — Miguel Martínez">
+        <div class="front-manager">
+          <div class="top-accent"></div>
+          <div class="bottom-accent"></div>
+          <div class="logo-area">
+            <img src="assets/DAJOMSlogo.png" alt="DAJOMS GROUP" />
+            <p class="tagline">Etiquetas para ropa con identidad y precisión</p>
+          </div>
+          <div>
+            <div style="width:28px;height:2px;background:#FF81A0;border-radius:1px;margin-bottom:8px;"></div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#aaa;">Business Manager</div>
+          </div>
+        </div>
+      </div>
+      <!-- REVERSO -->
+      <div class="card" title="Reverso — Miguel Martínez">
+        <div class="back-card light">
+          <div class="back-accent-line"></div>
+          <div class="back-corner"></div>
+          <div class="back-nombre dark">Miguel Martínez<br/>Vázquez</div>
+          <div class="back-cargo">Business Manager</div>
+          <div class="back-divider"></div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="#404042" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span class="back-info-text dark">+52 (55) 0000-0000</span>
+          </div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="#404042" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span class="back-info-text dark">miguel@dajoms.com</span>
+          </div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="#404042" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="back-info-text dark">www.dajoms.com</span>
+          </div>
+          <div class="back-empresa dark">DAJOMS GROUP</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Miguel Martínez Vázquez · Business Manager</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════ VENTAS ══════════════════════════ -->
+<div class="section-title">Equipo de <span>Ventas</span></div>
+<div class="cards-row" id="ventas-row">
+
+  <!-- ROXANA -->
+  <div class="card-unit">
+    <div class="card-pair">
+      <div class="card">
+        <div class="front-ventas">
+          <div class="corner-tl"></div>
+          <div class="side-line"></div>
+          <div class="logo-area">
+            <img src="assets/DAJOMSlogo.png" alt="DAJOMS GROUP" />
+            <p class="tagline">Etiquetas para ropa con identidad y precisión</p>
+          </div>
+          <div>
+            <div style="width:24px;height:2px;background:#FF81A0;border-radius:1px;margin-bottom:7px;"></div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);">Ventas</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="back-card">
+          <div class="back-accent-line"></div>
+          <div class="back-corner"></div>
+          <div class="back-nombre">Roxana<br/>Rochin</div>
+          <div class="back-cargo">Ejecutiva de Ventas</div>
+          <div class="back-divider"></div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span class="back-info-text">+52 (55) 0000-0000</span>
+          </div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span class="back-info-text">roxana@dajoms.com</span>
+          </div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="back-info-text">www.dajoms.com</span>
+          </div>
+          <div class="back-empresa">DAJOMS GROUP</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Roxana Rochin · Ventas</div>
+  </div>
+
+  <!-- JAQUELINE -->
+  <div class="card-unit">
+    <div class="card-pair">
+      <div class="card">
+        <div class="front-ventas">
+          <div class="corner-tl"></div>
+          <div class="side-line"></div>
+          <div class="logo-area">
+            <img src="assets/DAJOMSlogo.png" alt="DAJOMS GROUP" />
+            <p class="tagline">Etiquetas para ropa con identidad y precisión</p>
+          </div>
+          <div>
+            <div style="width:24px;height:2px;background:#FF81A0;border-radius:1px;margin-bottom:7px;"></div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);">Ventas</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="back-card">
+          <div class="back-accent-line"></div>
+          <div class="back-corner"></div>
+          <div class="back-nombre">Jaqueline<br/>Reyes</div>
+          <div class="back-cargo">Ejecutiva de Ventas</div>
+          <div class="back-divider"></div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span class="back-info-text">+52 (55) 0000-0000</span>
+          </div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span class="back-info-text">jaqueline@dajoms.com</span>
+          </div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="back-info-text">www.dajoms.com</span>
+          </div>
+          <div class="back-empresa">DAJOMS GROUP</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Jaqueline Reyes · Ventas</div>
+  </div>
+
+  <!-- VERÓNICA -->
+  <div class="card-unit">
+    <div class="card-pair">
+      <div class="card">
+        <div class="front-ventas">
+          <div class="corner-tl"></div>
+          <div class="side-line"></div>
+          <div class="logo-area">
+            <img src="assets/DAJOMSlogo.png" alt="DAJOMS GROUP" />
+            <p class="tagline">Etiquetas para ropa con identidad y precisión</p>
+          </div>
+          <div>
+            <div style="width:24px;height:2px;background:#FF81A0;border-radius:1px;margin-bottom:7px;"></div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);">Ventas</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="back-card">
+          <div class="back-accent-line"></div>
+          <div class="back-corner"></div>
+          <div class="back-nombre">Verónica<br/>Reyes</div>
+          <div class="back-cargo">Ejecutiva de Ventas</div>
+          <div class="back-divider"></div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span class="back-info-text">+52 (55) 0000-0000</span>
+          </div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span class="back-info-text">veronica@dajoms.com</span>
+          </div>
+          <div class="back-info-row">
+            <svg class="back-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="back-info-text">www.dajoms.com</span>
+          </div>
+          <div class="back-empresa">DAJOMS GROUP</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-label">Verónica Reyes · Ventas</div>
+  </div>
+
+</div>
+
+<div style="text-align:center;margin-top:48px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.2);">
+  DAJOMS GROUP · Medidas reales de impresión: 85 × 55 mm · Resolución mínima recomendada: 300 dpi
+</div>
+
+<script>
+function setView(mode) {
+  document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  document.querySelectorAll('.card-pair').forEach(pair => {
+    const cards = pair.querySelectorAll('.card');
+    if (mode === 'ambos') {
+      cards.forEach(c => c.style.display = '');
+      pair.style.gap = '8px';
+    } else if (mode === 'frente') {
+      cards[0].style.display = '';
+      cards[1].style.display = 'none';
+    } else if (mode === 'reverso') {
+      cards[0].style.display = 'none';
+      cards[1].style.display = '';
+    }
+  });
+}
+</script>
+</body>
+</html>

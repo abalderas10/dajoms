@@ -1,0 +1,42 @@
+{
+  "name": "dajoms-group",
+  "version": "1.0.0",
+  "description": "DAJOMS GROUP - Etiquetas y soluciones de identidad textil para marcas",
+  "main": "index.html",
+  "scripts": {
+    "start": "open index.html",
+    "dev": "python -m http.server 8000",
+    "build": "echo 'No build needed - static HTML'",
+    "deploy": "git push origin main"
+  },
+  "keywords": [
+    "etiquetas",
+    "textil",
+    "marca",
+    "identidad",
+    "ropa"
+  ],
+  "author": "DAJOMS GROUP",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abalderas10/dajoms.git"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {},
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

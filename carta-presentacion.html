@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DAJOMS GROUP — Carta de Presentación</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #e8e8e8; font-family: 'Inter', sans-serif; color: #404042; }
+
+    .page {
+      width: 794px;
+      min-height: 1123px;
+      background: #fff;
+      margin: 32px auto;
+      position: relative;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.10);
+      overflow: hidden;
+      page-break-after: always;
+    }
+
+    /* Banda lateral izquierda */
+    .sidebar {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 8px;
+      background: #FF81A0;
+    }
+
+    .page-inner {
+      padding: 56px 56px 48px 76px;
+      min-height: 1123px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 40px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .header-logo img { height: 40px; }
+    .header-info { text-align: right; }
+    .header-info p { font-size: 10px; color: #8a8888; line-height: 1.7; font-family: 'Inter', sans-serif; }
+    .header-info .fecha { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 600; color: #FF81A0; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+
+    /* DESTINATARIO */
+    .destinatario {
+      margin-bottom: 28px;
+    }
+    .destinatario p { font-size: 12px; color: #404042; line-height: 1.8; }
+    .destinatario .label { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #FF81A0; margin-bottom: 4px; }
+
+    /* ASUNTO */
+    .asunto {
+      background: #F3F4F6;
+      border-left: 3px solid #FF81A0;
+      padding: 12px 18px;
+      margin-bottom: 32px;
+      border-radius: 0 3px 3px 0;
+    }
+    .asunto span { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #404042; }
+    .asunto p { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; color: #404042; margin-top: 3px; }
+
+    /* CUERPO */
+    .cuerpo { flex: 1; }
+    .saludo { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: #404042; margin-bottom: 20px; }
+    .parrafo { font-size: 13px; line-height: 1.9; color: #555; margin-bottom: 16px; text-wrap: pretty; }
+    .parrafo strong { color: #404042; font-weight: 600; }
+
+    /* TABLA PRODUCTOS */
+    .tabla-titulo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #FF81A0;
+      margin: 28px 0 14px;
+    }
+    .tabla {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    .tabla thead tr {
+      background: #404042;
+    }
+    .tabla thead th {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    .tabla tbody tr { border-bottom: 1px solid #f0f0f0; }
+    .tabla tbody tr:nth-child(even) { background: #FAFAFA; }
+    .tabla tbody td {
+      font-size: 11px;
+      color: #555;
+      padding: 9px 14px;
+      line-height: 1.5;
+      vertical-align: top;
+    }
+    .tabla tbody td:first-child { font-family: 'Montserrat', sans-serif; font-weight: 600; color: #404042; font-size: 11px; }
+    .tag-rosa {
+      display: inline-block;
+      background: #fff0f4;
+      color: #FF81A0;
+      border: 1px solid #ffc8d8;
+      border-radius: 20px;
+      padding: 2px 8px;
+      font-size: 9px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin: 1px;
+    }
+
+    /* DIFERENCIADORES */
+    .difs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 20px 0 24px;
+    }
+    .dif-card {
+      border: 1px solid #e8e8e8;
+      border-top: 2px solid #FF81A0;
+      border-radius: 3px;
+      padding: 14px 14px;
+    }
+    .dif-card h4 { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700; color: #404042; margin-bottom: 5px; }
+    .dif-card p { font-size: 10px; line-height: 1.65; color: #777; }
+
+    /* CLIENTES */
+    .clientes-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 10px 0 24px; }
+    .cliente-chip {
+      background: #F3F4F6;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: #404042;
+      letter-spacing: 0.05em;
+    }
+
+    /* CIERRE */
+    .cierre { margin-top: 24px; }
+    .firma-bloque { margin-top: 32px; }
+    .firma-linea { width: 160px; height: 1px; background: #D9DCE2; margin-bottom: 8px; }
+    .firma-nombre { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; color: #404042; }
+    .firma-cargo { font-family: 'Inter', sans-serif; font-size: 11px; color: #8a8888; margin-top: 2px; }
+    .firma-empresa { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700; color: #FF81A0; margin-top: 4px; letter-spacing: 0.06em; }
+
+    /* FOOTER PAGE */
+    .page-footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #e8e8e8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .page-footer p { font-size: 9px; color: #bbb; font-family: 'Inter', sans-serif; }
+    .page-footer .acento { color: #FF81A0; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.08em; }
+
+    /* SEGUNDA PÁGINA - fichas de producto */
+    .ficha-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 8px; }
+    .ficha {
+      border: 1px solid #e8e8e8;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .ficha-header {
+      background: #404042;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ficha-num { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 800; color: rgba(255,255,255,0.15); }
+    .ficha-nombre { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
+    .ficha-body { padding: 14px 16px; }
+    .ficha-row { display: flex; margin-bottom: 7px; gap: 8px; }
+    .ficha-key { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #FF81A0; min-width: 80px; padding-top: 1px; }
+    .ficha-val { font-size: 11px; color: #555; line-height: 1.5; }
+    .ficha-img {
+      height: 70px;
+      background: repeating-linear-gradient(45deg,#F3F4F6,#F3F4F6 4px,#e8e9eb 4px,#e8e9eb 8px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ficha-img span { font-family: monospace; font-size: 9px; color: #bbb; }
+
+    @media print {
+      body { background: #fff; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; }
+      .no-print { display: none; }
+    }
+
+    /* NAV */
+    .nav-print {
+      text-align: center;
+      padding: 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+    }
+    .nav-print button {
+      background: #FF81A0; color: #fff; border: none; padding: 10px 24px;
+      border-radius: 4px; font-family: 'Montserrat', sans-serif; font-weight: 700;
+      font-size: 12px; cursor: pointer; margin: 0 6px; letter-spacing: 0.06em;
+    }
+    .nav-print button.sec {
+      background: #fff; color: #404042; border: 1.5px solid #D9DCE2;
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav-print no-print">
+  <button onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button class="sec" onclick="window.location.href='DAJOMS Tarjetas.html'">Ver Tarjetas →</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ PÁGINA 1: CARTA -->
+<div class="page">
+  <div class="sidebar"></div>
+  <div class="page-inner">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-logo"><img src="assets/DAJOMSlogo.png" alt="DAJOMS GROUP" /></div>
+      <div class="header-info">
+        <p class="fecha">Ciudad de México, 2026</p>
+        <p>contacto@dajoms.com</p>
+        <p>+52 (55) 0000-0000</p>
+        <p>www.dajoms.com</p>
+      </div>
+    </div>
+
+    <!-- TÍTULO PRINCIPAL -->
+    <div style="text-align:center;margin-bottom:32px;">
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:#404042;letter-spacing:0.02em;line-height:1.3;">Presentación institucional — DAJOMS GROUP<br/><span style="font-weight:400;font-size:14px;color:#aaa;letter-spacing:0.04em;">Etiquetas para ropa e identidad textil</span></h2>
+    </div>
+
+    <!-- DESTINATARIO -->
+    <div class="destinatario">
+      <p class="label">Destinatario</p>
+      <p><strong>Estimado equipo:</strong></p>
+    </div>
+
+    <!-- CUERPO -->
+    <div class="cuerpo">
+      <p class="parrafo">
+        Es un gusto presentarles a <strong>DAJOMS GROUP</strong>, una empresa especializada en el desarrollo de etiquetas para ropa y soluciones de identidad textil, orientadas a marcas, fabricantes y empresas del sector que buscan calidad, precisión y una presentación completamente alineada con su identidad.
+      </p>
+      <p class="parrafo">
+        En DAJOMS entendemos que una etiqueta no sólo cumple una función operativa: también representa un detalle clave en la percepción final de la prenda. Por ello, trabajamos con un enfoque que combina <strong>atención personalizada, ejecución confiable</strong> y una visión estética que aporta valor real a cada proyecto.
+      </p>
+
+      <p class="tabla-titulo">Líneas de producto</p>
+
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Materiales</th>
+            <th>Cortes y pliegues</th>
+            <th>Aplicaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Etiquetas tejidas</td>
+            <td>Poliéster · Nylon · Hilo metálico</td>
+            <td>
+              <span class="tag-rosa">Recto</span>
+              <span class="tag-rosa">Inglés</span>
+              <span class="tag-rosa">Central</span>
+              <span class="tag-rosa">Enrollado</span>
+              <span class="tag-rosa">Manhattan</span>
+              <span class="tag-rosa">Loop</span>
+            </td>
+            <td>Moda, jeans, ropa infantil, uniformes</td>
+          </tr>
+          <tr>
+            <td>Etiquetas impresas</td>
+            <td>Tafetán · Satín · Algodón · Nylon</td>
+            <td>
+              <span class="tag-rosa">Recto</span>
+              <span class="tag-rosa">Central</span>
+              <span class="tag-rosa">Lateral</span>
+              <span class="tag-rosa">Troquelado</span>
+            </td>
+            <td>Prendas en general, cuidado de tela, tallas</td>
+          </tr>
+          <tr>
+            <td>Etiquetas satinadas</td>
+            <td>Satín poliéster · Satín seda</td>
+            <td>
+              <span class="tag-rosa">Recto</span>
+              <span class="tag-rosa">Central</span>
+              <span class="tag-rosa">Enrollado</span>
+            </td>
+            <td>Lencería, moda femenina, alta gama</td>
+          </tr>
+          <tr>
+            <td>Hang Tags</td>
+            <td>Cartulina 350gsm · Papel especial · Kraft · Lustre</td>
+            <td>
+              <span class="tag-rosa">Estándar</span>
+              <span class="tag-rosa">Troquelado</span>
+              <span class="tag-rosa">Barniz UV</span>
+              <span class="tag-rosa">Laminado</span>
+            </td>
+            <td>Colecciones de moda, retail, boutique</td>
+          </tr>
+          <tr>
+            <td>Heat Transfers</td>
+            <td>Vinil textil · Film sublimación · Serigrafía</td>
+            <td>
+              <span class="tag-rosa">Forma libre</span>
+              <span class="tag-rosa">Troquelado</span>
+            </td>
+            <td>Ropa deportiva, técnica, sin costura</td>
+          </tr>
+          <tr>
+            <td>Soluciones personalizadas</td>
+            <td>Cuero sintético · Metálico · Combinado · A consultar</td>
+            <td>
+              <span class="tag-rosa">A medida</span>
+            </td>
+            <td>Proyectos especiales, ediciones limitadas</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- DIFERENCIADORES -->
+      <p class="tabla-titulo">Por qué elegirnos</p>
+      <div class="difs">
+        <div class="dif-card">
+          <h4>Precisión técnica</h4>
+          <p>Producimos con estándares de calidad que garantizan consistencia desde el primer lote hasta el último.</p>
+        </div>
+        <div class="dif-card">
+          <h4>Atención personalizada</h4>
+          <p>Acompañamos cada proyecto con comunicación directa, plazos claros y total disponibilidad.</p>
+        </div>
+        <div class="dif-card">
+          <h4>Experiencia comprobada</h4>
+          <p>Más de 15 años colaborando con marcas relevantes del sector textil y retail.</p>
+        </div>
+      </div>
+
+      <!-- CLIENTES -->
+      <p class="tabla-titulo">Clientes con quienes hemos colaborado</p>
+      <div class="clientes-row">
+        <div class="cliente-chip">Cuidado con el Perro</div>
+        <div class="cliente-chip">Mala Hierba</div>
+        <div class="cliente-chip">KIDS</div>
+        <div class="cliente-chip">Coppel</div>
+        <div class="cliente-chip">+500 marcas atendidas</div>
+      </div>
+
+      <!-- CIERRE -->
+      <div class="cierre">
+        <p class="parrafo">
+          Nos encantaría tener la oportunidad de conocer sus necesidades y presentarles una propuesta adecuada para su operación y estilo de producto. Quedamos a su entera disposición para compartir catálogo, muestras físicas y cotización sin compromiso.
+        </p>
+        <p class="parrafo" style="font-style: italic; color: #888;">
+          "La firma textil que da identidad a cada prenda."
+        </p>
+      </div>
+
+      <!-- FIRMA -->
+      <div class="firma-bloque">
+        <div class="firma-linea"></div>
+        <p class="firma-nombre">Equipo Comercial</p>
+        <p class="firma-cargo">Asesoría y Ventas</p>
+        <p class="firma-empresa">DAJOMS GROUP</p>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="page-footer">
+      <p>© 2026 DAJOMS GROUP · contacto@dajoms.com · +52 (55) 0000-0000</p>
+      <p class="acento">DAJOMS GROUP</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ PÁGINA 2: FICHAS DE PRODUCTO -->
+<div class="page">
+  <div class="sidebar"></div>
+  <div class="page-inner">
+
+    <div class="header">
+      <div class="header-logo"><img src="assets/DAJOMSlogo.png" alt="DAJOMS GROUP" /></div>
+      <div class="header-info">
+        <p class="fecha">Fichas de producto</p>
+        <p>Especificaciones técnicas por línea</p>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#FF81A0;margin-bottom:6px;">Especificaciones técnicas</p>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#404042;">Líneas de producto DAJOMS GROUP</h2>
+    </div>
+
+    <div class="ficha-grid">
+
+      <!-- TEJIDAS -->
+      <div class="ficha">
+        <div class="ficha-header">
+          <span class="ficha-num">01</span>
+          <span class="ficha-nombre">Etiquetas tejidas</span>
+        </div>
+        <div class="ficha-img"><span>fotografía — etiqueta tejida jacquard</span></div>
+        <div class="ficha-body">
+          <div class="ficha-row"><span class="ficha-key">Técnica</span><span class="ficha-val">Telar jacquard de alta definición</span></div>
+          <div class="ficha-row"><span class="ficha-key">Materiales</span><span class="ficha-val">Poliéster, nylon, hilo metálico, algodón</span></div>
+          <div class="ficha-row"><span class="ficha-key">Anchos</span><span class="ficha-val">10 mm · 15 mm · 20 mm · 25 mm · 32 mm · 50 mm</span></div>
+          <div class="ficha-row"><span class="ficha-key">Cortes</span><span class="ficha-val">Recto, inglés, en frío (ultrasonido)</span></div>
+          <div class="ficha-row"><span class="ficha-key">Pliegues</span><span class="ficha-val">Central, enrollado, lateral, manhattan, loop, end fold</span></div>
+          <div class="ficha-row"><span class="ficha-key">Colores</span><span class="ficha-val">Hasta 8 colores en diseño</span></div>
+          <div class="ficha-row"><span class="ficha-key">Cantidad mín.</span><span class="ficha-val">Desde 100 piezas por diseño</span></div>
+        </div>
+      </div>
+
+      <!-- IMPRESAS -->
+      <div class="ficha">
+        <div class="ficha-header">
+          <span class="ficha-num">02</span>
+          <span class="ficha-nombre">Etiquetas impresas</span>
+        </div>
+        <div class="ficha-img"><span>fotografía — etiqueta impresa tafetán</span></div>
+        <div class="ficha-body">
+          <div class="ficha-row"><span class="ficha-key">Técnica</span><span class="ficha-val">Impresión digital y flexográfica</span></div>
+          <div class="ficha-row"><span class="ficha-key">Sustratos</span><span class="ficha-val">Tafetán, satín, nylon, algodón, poliéster</span></div>
+          <div class="ficha-row"><span class="ficha-key">Resolución</span><span class="ficha-val">Hasta 1,200 dpi · Colores CMYK + pantones</span></div>
+          <div class="ficha-row"><span class="ficha-key">Cortes</span><span class="ficha-val">Recto, troquelado, onda, forma libre</span></div>
+          <div class="ficha-row"><span class="ficha-key">Pliegues</span><span class="ficha-val">Central, lateral, enrollado, sin pliegue</span></div>
+          <div class="ficha-row"><span class="ficha-key">Acabados</span><span class="ficha-val">Tintas resistentes al lavado industrial</span></div>
+          <div class="ficha-row"><span class="ficha-key">Cantidad mín.</span><span class="ficha-val">Desde 200 piezas por diseño</span></div>
+        </div>
+      </div>
+
+      <!-- SATINADAS -->
+      <div class="ficha">
+        <div class="ficha-header">
+          <span class="ficha-num">03</span>
+          <span class="ficha-nombre">Etiquetas satinadas</span>
+        </div>
+        <div class="ficha-img"><span>fotografía — etiqueta satinada premium</span></div>
+        <div class="ficha-body">
+          <div class="ficha-row"><span class="ficha-key">Sustrato</span><span class="ficha-val">Satín poliéster, satín seda</span></div>
+          <div class="ficha-row"><span class="ficha-key">Acabado</span><span class="ficha-val">Brillante suave, tacto premium</span></div>
+          <div class="ficha-row"><span class="ficha-key">Anchos</span><span class="ficha-val">15 mm · 20 mm · 25 mm · 32 mm · 50 mm</span></div>
+          <div class="ficha-row"><span class="ficha-key">Impresión</span><span class="ficha-val">Ribbon, sublimación, digital</span></div>
+          <div class="ficha-row"><span class="ficha-key">Pliegues</span><span class="ficha-val">Recto, central, enrollado</span></div>
+          <div class="ficha-row"><span class="ficha-key">Ideal para</span><span class="ficha-val">Lencería, moda femenina, alta gama</span></div>
+          <div class="ficha-row"><span class="ficha-key">Cantidad mín.</span><span class="ficha-val">Desde 150 piezas por diseño</span></div>
+        </div>
+      </div>
+
+      <!-- HANG TAGS -->
+      <div class="ficha">
+        <div class="ficha-header">
+          <span class="ficha-num">04</span>
+          <span class="ficha-nombre">Hang Tags</span>
+        </div>
+        <div class="ficha-img"><span>fotografía — hang tag colección</span></div>
+        <div class="ficha-body">
+          <div class="ficha-row"><span class="ficha-key">Materiales</span><span class="ficha-val">Cartulina 300–400gsm, papel kraft, lustre, textura</span></div>
+          <div class="ficha-row"><span class="ficha-key">Tamaños</span><span class="ficha-val">5×9 cm · 6×10 cm · 7×12 cm · personalizados</span></div>
+          <div class="ficha-row"><span class="ficha-key">Impresión</span><span class="ficha-val">Offset 4 tintas + pantones · digital</span></div>
+          <div class="ficha-row"><span class="ficha-key">Acabados</span><span class="ficha-val">Barniz UV, laminado mate/brillante, relieve, hot stamping</span></div>
+          <div class="ficha-row"><span class="ficha-key">Opciones</span><span class="ficha-val">Perforación, argolla metálica, cordón, suaje</span></div>
+          <div class="ficha-row"><span class="ficha-key">Cantidad mín.</span><span class="ficha-val">Desde 100 piezas</span></div>
+        </div>
+      </div>
+
+      <!-- HEAT TRANSFERS -->
+      <div class="ficha">
+        <div class="ficha-header">
+          <span class="ficha-num">05</span>
+          <span class="ficha-nombre">Heat Transfers</span>
+        </div>
+        <div class="ficha-img"><span>fotografía — heat transfer aplicado</span></div>
+        <div class="ficha-body">
+          <div class="ficha-row"><span class="ficha-key">Tecnología</span><span class="ficha-val">Vinil textil, sublimación, serigrafía transfer</span></div>
+          <div class="ficha-row"><span class="ficha-key">Sustratos</span><span class="ficha-val">Algodón, poliéster, mezcla, nylon</span></div>
+          <div class="ficha-row"><span class="ficha-key">Acabado</span><span class="ficha-val">Mate, brillante, suave al tacto (soft feel)</span></div>
+          <div class="ficha-row"><span class="ficha-key">Corte</span><span class="ficha-val">Troquelado a forma libre o rectangular</span></div>
+          <div class="ficha-row"><span class="ficha-key">Resistencia</span><span class="ficha-val">Hasta 40 lavados industriales</span></div>
+          <div class="ficha-row"><span class="ficha-key">Aplicación</span><span class="ficha-val">Prensa de calor 160–180°C / 10–15 seg</span></div>
+          <div class="ficha-row"><span class="ficha-key">Cantidad mín.</span><span class="ficha-val">Desde 200 piezas</span></div>
+        </div>
+      </div>
+
+      <!-- PERSONALIZADAS -->
+      <div class="ficha">
+        <div class="ficha-header">
+          <span class="ficha-num">06</span>
+          <span class="ficha-nombre">Soluciones personalizadas</span>
+        </div>
+        <div class="ficha-img"><span>fotografía — solución especial / detalle</span></div>
+        <div class="ficha-body">
+          <div class="ficha-row"><span class="ficha-key">Materiales</span><span class="ficha-val">Cuero sintético, metal, combinados, tela especial</span></div>
+          <div class="ficha-row"><span class="ficha-key">Acabados</span><span class="ficha-key" style="color:#555;font-size:11px;text-transform:none;letter-spacing:0;">Repujado, grabado láser, hot stamping, bordado</span></div>
+          <div class="ficha-row"><span class="ficha-key">Formatos</span><span class="ficha-val">A medida, edición limitada, proyectos especiales</span></div>
+          <div class="ficha-row"><span class="ficha-key">Proceso</span><span class="ficha-val">Consulta, desarrollo de muestra y aprobación</span></div>
+          <div class="ficha-row"><span class="ficha-key">Tiempos</span><span class="ficha-val">A convenir según especificación y volumen</span></div>
+          <div class="ficha-row"><span class="ficha-key">Cantidad mín.</span><span class="ficha-val">Según proyecto · Consultar</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PROCESO -->
+    <div style="margin-top:24px;background:#F3F4F6;border-radius:4px;padding:18px 20px;">
+      <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#FF81A0;margin-bottom:14px;">Nuestro proceso</p>
+      <div style="display:flex;align-items:flex-start;gap:0;">
+
+        <div style="flex:1;text-align:center;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#404042;color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">1</div>
+          <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;color:#404042;margin-bottom:3px;">Consulta</div>
+          <div style="font-family:'Inter',sans-serif;font-size:9px;color:#aaa;">Asesoría inicial</div>
+        </div>
+
+        <div style="padding-top:14px;color:#D9DCE2;font-size:18px;line-height:1;">→</div>
+
+        <div style="flex:1;text-align:center;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#404042;color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">2</div>
+          <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;color:#404042;margin-bottom:3px;">Diseño</div>
+          <div style="font-family:'Inter',sans-serif;font-size:9px;color:#aaa;">Arte y aprobación</div>
+        </div>
+
+        <div style="padding-top:14px;color:#D9DCE2;font-size:18px;line-height:1;">→</div>
+
+        <div style="flex:1;text-align:center;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#404042;color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">3</div>
+          <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;color:#404042;margin-bottom:3px;">Muestra</div>
+          <div style="font-family:'Inter',sans-serif;font-size:9px;color:#aaa;">Física o digital</div>
+        </div>
+
+        <div style="padding-top:14px;color:#D9DCE2;font-size:18px;line-height:1;">→</div>
+
+        <div style="flex:1;text-align:center;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#FF81A0;color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">4</div>
+          <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;color:#404042;margin-bottom:3px;">Producción</div>
+          <div style="font-family:'Inter',sans-serif;font-size:9px;color:#aaa;">Control de calidad</div>
+        </div>
+
+        <div style="padding-top:14px;color:#D9DCE2;font-size:18px;line-height:1;">→</div>
+
+        <div style="flex:1;text-align:center;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#FF81A0;color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">5</div>
+          <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;color:#404042;margin-bottom:3px;">Entrega</div>
+          <div style="font-family:'Inter',sans-serif;font-size:9px;color:#aaa;">Puntual y confirmada</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="page-footer" style="margin-top:20px;">
+      <p>© 2026 DAJOMS GROUP · contacto@dajoms.com · +52 (55) 0000-0000 · www.dajoms.com</p>
+      <p class="acento">DAJOMS GROUP</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DAJOMS GROUP — Presentación Comercial Impresa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    /* ── Viewport wrapper ── */
+    .presentation-container {
+      max-width: 1920px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ── Controls ── */
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .controls button, .controls select {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 10px 16px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      background: white;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .controls button:hover {
+      background: #FF81A0;
+      color: white;
+      border-color: #FF81A0;
+    }
+    .controls button.active {
+      background: #FF81A0;
+      color: white;
+      border-color: #FF81A0;
+    }
+    .slide-counter {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    /* ── Slide base ── */
+    .slide {
+      width: 1920px;
+      height: 1440px;
+      background: white;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide.hidden { display: none; }
+
+    /* ── Slide content grid ── */
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 120px 140px;
+      justify-content: center;
+    }
+
+    /* ── Top accent bar ── */
+    .slide-accent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: #FF81A0;
+    }
+
+    /* ── Slide number ── */
+    .slide-number {
+      position: absolute;
+      bottom: 40px;
+      right: 60px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #f0f0f0;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Logo footer ── */
+    .slide-logo {
+      position: absolute;
+      bottom: 40px;
+      left: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .slide-logo img {
+      height: 24px;
+    }
+    .slide-logo-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    /* ── Typography ── */
+    h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 72px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: #1a1a1a;
+      margin-bottom: 32px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: #1a1a1a;
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: #666;
+      margin-bottom: 32px;
+      letter-spacing: 0.02em;
+    }
+
+    .body-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    .accent-text {
+      color: #FF81A0;
+      font-weight: 600;
+    }
+
+    .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: #999;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Two-column layout ── */
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .column-text h2 { margin-top: 0; }
+
+    /* ── Feature list ── */
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      margin-top: 24px;
+    }
+
+    .feature-item {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .feature-dot {
+      width: 12px;
+      height: 12px;
+      background: #FF81A0;
+      border-radius: 50%;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .feature-text {
+      font-size: 18px;
+      line-height: 1.6;
+      color: #444;
+    }
+
+    /* ── Process steps ── */
+    .process-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 28px;
+    }
+
+    .process-step {
+      background: #f8f8f8;
+      padding: 28px;
+      border-left: 4px solid #FF81A0;
+      border-radius: 2px;
+    }
+
+    .step-number {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #FF81A0;
+      margin-bottom: 8px;
+    }
+
+    .step-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+    }
+
+    .step-description {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #666;
+    }
+
+    /* ── Value cards ── */
+    .values-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 28px;
+    }
+
+    .value-card {
+      padding: 32px;
+      background: white;
+      border: 1px solid #e8e8e8;
+      border-radius: 2px;
+    }
+
+    .value-icon {
+      font-size: 32px;
+      color: #FF81A0;
+      margin-bottom: 16px;
+    }
+
+    .value-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+    }
+
+    .value-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #666;
+    }
+
+    /* ── CTA section ── */
+    .cta-box {
+      background: #f8f8f8;
+      padding: 48px;
+      border-radius: 2px;
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    .cta-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+    }
+
+    .cta-text {
+      font-size: 18px;
+      line-height: 1.6;
+      color: #666;
+      margin-bottom: 24px;
+    }
+
+    /* ── Contact section (última diapositiva) ── */
+    .contact-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      margin-top: 28px;
+    }
+
+    .contact-card {
+      padding: 40px;
+      background: white;
+      border: 1px solid #e8e8e8;
+      border-radius: 2px;
+      border-left: 4px solid #FF81A0;
+    }
+
+    .contact-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .contact-role {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #FF81A0;
+      margin-bottom: 20px;
+    }
+
+    .contact-info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .contact-info {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #666;
+    }
+
+    .contact-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 4px;
+    }
+
+    /* ── Print styles ── */
+    @media print {
+      body { background: white; padding: 0; margin: 0; }
+      .controls { display: none; }
+      .slide {
+        page-break-after: always;
+        margin-bottom: 0;
+        box-shadow: none;
+        border: none;
+      }
+      .slide.hidden { display: flex !important; }
+    }
+
+    /* ── Responsive adjustments ── */
+    @media (max-width: 1920px) {
+      .slide {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      
+      .slide {
+        width: 100%;
+        height: auto;
+        aspect-ratio: auto;
+        margin-bottom: 16px;
+        min-height: auto;
+      }
+
+      .slide-content {
+        padding: 60px 40px;
+        min-height: auto;
+      }
+
+      .controls {
+        margin-bottom: 16px;
+        gap: 8px;
+      }
+
+      .controls button, .controls select {
+        padding: 8px 12px;
+        font-size: 10px;
+      }
+
+      .slide-counter {
+        font-size: 11px;
+        min-width: 70px;
+      }
+
+      h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        font-size: 28px;
+        margin-bottom: 16px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .body-text {
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+
+      .two-column {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .feature-list {
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .feature-item {
+        gap: 12px;
+      }
+
+      .feature-text {
+        font-size: 14px;
+      }
+
+      .process-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .process-step {
+        padding: 20px;
+      }
+
+      .step-title {
+        font-size: 16px;
+      }
+
+      .step-description {
+        font-size: 14px;
+      }
+
+      .values-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .value-card {
+        padding: 20px;
+      }
+
+      .value-title {
+        font-size: 16px;
+      }
+
+      .value-text {
+        font-size: 14px;
+      }
+
+      .cta-box {
+        padding: 24px;
+        margin-top: 20px;
+      }
+
+      .cta-title {
+        font-size: 20px;
+      }
+
+      .cta-text {
+        font-size: 14px;
+      }
+
+      .contact-section {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        margin-top: 16px;
+      }
+
+      .contact-card {
+        padding: 24px;
+      }
+
+      .contact-name {
+        font-size: 18px;
+      }
+
+      .contact-info {
+        font-size: 13px;
+      }
+
+      .slide-number {
+        bottom: 20px;
+        right: 24px;
+        font-size: 18px;
+      }
+
+      .slide-logo {
+        bottom: 20px;
+        left: 24px;
+      }
+
+      .slide-logo img {
+        height: 16px;
+      }
+
+      .slide-logo-text {
+        font-size: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 8px; }
+
+      .slide-content {
+        padding: 40px 24px;
+      }
+
+      .controls {
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+
+      .controls button {
+        padding: 6px 10px;
+        font-size: 9px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+      }
+
+      .body-text {
+        font-size: 13px;
+      }
+
+      .feature-list {
+        gap: 12px;
+      }
+
+      .feature-dot {
+        width: 8px;
+        height: 8px;
+      }
+
+      .feature-text {
+        font-size: 13px;
+      }
+
+      .process-step {
+        padding: 16px;
+      }
+
+      .step-number {
+        font-size: 12px;
+      }
+
+      .step-title {
+        font-size: 14px;
+      }
+
+      .step-description {
+        font-size: 13px;
+      }
+
+      .contact-name {
+        font-size: 16px;
+      }
+
+      .contact-role {
+        font-size: 11px;
+      }
+
+      .slide-number {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="presentation-container">
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <button class="active" onclick="showSlide(0)">Inicio</button>
+    <button onclick="showSlide(1)">Slide 1</button>
+    <button onclick="showSlide(2)">Slide 2</button>
+    <button onclick="showSlide(3)">Slide 3</button>
+    <button onclick="showSlide(4)">Slide 4</button>
+    <button onclick="showSlide(5)">Slide 5</button>
+    <button onclick="showSlide(6)">Slide 6</button>
+    <button onclick="showSlide(7)">Slide 7</button>
+    <button onclick="showSlide(8)">Slide 8</button>
+    <button onclick="showSlide(9)">Slide 9</button>
+    <button onclick="showSlide(10)">Slide 10</button>
+    <button onclick="showSlide(11)">Cierre</button>
+    <span style="width: 1px; height: 20px; background: #ddd; margin: 0 8px;"></span>
+    <button onclick="window.print()" style="background: #FF81A0; color: white; border-color: #FF81A0;">Imprimir / PDF</button>
+  </div>
+
+  <div class="slide-counter"><span id="slide-num">1</span> / 12</div>
+
+  <!-- SLIDE 0: PORTADA -->
+  <div class="slide" id="slide-0">
+    <div class="slide-accent"></div>
+    <div class="slide-content" style="justify-content: space-between; padding: 160px 140px 120px;">
+      <div>
+        <h1 style="margin-bottom: 48px;">DAJOMS GROUP</h1>
+        <p class="subtitle" style="font-size: 32px; margin-bottom: 48px;">Etiquetas y soluciones de identidad textil para marcas que cuidan cada detalle</p>
+      </div>
+      <p class="tagline" style="font-size: 14px;">Presentación comercial para nuevos clientes</p>
+    </div>
+    <div class="slide-number">1</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 1: Etiquetas que elevan -->
+  <div class="slide hidden" id="slide-1">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <h2>Etiquetas que elevan la identidad de tu marca</h2>
+      <p class="subtitle">En DAJOMS desarrollamos soluciones textiles que combinan imagen, precisión y calidad de producción.</p>
+      <p class="body-text">Cada etiqueta es una extensión de la marca. Por eso trabajamos piezas que no sólo cumplen una función técnica, sino que también fortalecen la presentación del producto final.</p>
+      <p class="body-text">Atendemos marcas, fabricantes y empresas que buscan consistencia visual, acabados confiables y un proveedor con enfoque profesional.</p>
+      <p style="font-size: 16px; color: #FF81A0; font-weight: 600; margin-top: 24px;">Identidad textil profesional.</p>
+    </div>
+    <div class="slide-number">2</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Quiénes somos -->
+  <div class="slide hidden" id="slide-2">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <h2>Quiénes somos</h2>
+      <p class="subtitle">Somos una empresa especializada en soluciones de identificación para prendas y productos textiles.</p>
+      <p class="body-text">En DAJOMS GROUP trabajamos con marcas que necesitan etiquetas bien resueltas, producción cuidada y una presentación alineada con el valor de su producto. Nuestra visión parte de una idea simple: <span class="accent-text">los detalles correctos construyen marcas más sólidas.</span></p>
+      <div class="feature-list" style="margin-top: 32px;">
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Experiencia en atención a marcas, fabricantes y cadenas comerciales.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Enfoque en calidad, cumplimiento y presentación impecable.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">3</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Qué hacemos -->
+  <div class="slide hidden" id="slide-3">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <h2>Qué hacemos</h2>
+      <p class="subtitle">Diseñamos y producimos soluciones que acompañan la identidad de cada prenda.</p>
+      <p class="body-text">Desarrollamos etiquetas tejidas, impresas, satinadas, colgantes, transferibles y soluciones personalizadas para distintas necesidades de marca, uso y aplicación.</p>
+      <div class="feature-list" style="margin-top: 32px;">
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Soluciones funcionales y visuales para moda, retail y producción textil.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Adaptación a requerimientos de diseño, materiales, medidas y acabados.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">4</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Soluciones para cada tipo -->
+  <div class="slide hidden" id="slide-4">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <h2>Soluciones para cada tipo de marca</h2>
+      <p class="subtitle">Una línea versátil para diferentes estilos, segmentos y niveles de personalización.</p>
+      <p class="body-text" style="margin-bottom: 28px;">Nuestro portafolio está diseñado para responder tanto a marcas que buscan una solución clara y eficiente como a proyectos que requieren un desarrollo más especializado. Cada opción se trabaja con criterio técnico y sensibilidad estética.</p>
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Etiquetas tejidas para una identidad textil de alto valor.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Etiquetas impresas para información clara y versátil.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Etiquetas satinadas y colgantes para presentaciones más refinadas.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Transfer y desarrollos personalizados para proyectos específicos.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">5</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Personalización -->
+  <div class="slide hidden" id="slide-5">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <h2>Personalización que se nota</h2>
+      <p class="subtitle">Cada marca necesita un lenguaje propio, y la etiqueta debe hablar ese mismo idioma.</p>
+      <p class="body-text" style="margin-bottom: 28px;">En DAJOMS adaptamos materiales, tamaño, color, textura, tipo de aplicación y nivel de detalle para que cada solución refleje el posicionamiento real de la marca.</p>
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Selección de acabados y materiales según el estilo del producto.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Ajustes de color y composición alineados con la identidad visual del cliente.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Desarrollo de propuestas pensadas para integrarse con la colección, empaque o punto de venta.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">6</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Nuestro proceso -->
+  <div class="slide hidden" id="slide-6">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <h2>Nuestro proceso de trabajo</h2>
+      <p class="subtitle">Un flujo claro para avanzar con orden, precisión y confianza.</p>
+      <div class="process-grid">
+        <div class="process-step">
+          <div class="step-number">Paso 1</div>
+          <div class="step-title">Entender la necesidad</div>
+          <div class="step-description">Comprendemos la necesidad de la marca y el uso final de la etiqueta.</div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">Paso 2</div>
+          <div class="step-title">Definir especificaciones</div>
+          <div class="step-description">Definimos especificaciones, materiales, formatos y acabados.</div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">Paso 3</div>
+          <div class="step-title">Desarrollar propuesta</div>
+          <div class="step-description">Desarrollamos propuesta, validamos y afinamos detalles.</div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">Paso 4</div>
+          <div class="step-title">Producir con calidad</div>
+          <div class="step-description">Producimos con seguimiento puntual y enfoque en calidad.</div>
+        </div>
+      </div>
+      <p class="body-text" style="margin-top: 32px; text-align: center; color: #666;">El objetivo es que cada proyecto avance con claridad desde la cotización hasta la entrega.</p>
+    </div>
+    <div class="slide-number">7</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Calidad en detalle -->
+  <div class="slide hidden" id="slide-7">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <h2>Calidad en cada detalle</h2>
+      <p class="subtitle">La diferencia entre una etiqueta correcta y una etiqueta memorable está en la ejecución.</p>
+      <p class="body-text" style="margin-bottom: 28px;">Cuidamos legibilidad, textura, aplicación, definición de color y presencia visual para que cada pieza se perciba consistente con el nivel de la marca que representa.</p>
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Atención al acabado final.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Criterio técnico y visual en cada desarrollo.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">Enfoque en presentación impecable.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">8</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Referencias -->
+  <div class="slide hidden" id="slide-8">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <h2>Marcas y sectores que atendemos</h2>
+      <p class="subtitle">Trabajamos con empresas que valoran la consistencia, la presentación y la confianza operativa.</p>
+      <p class="body-text">DAJOMS ha desarrollado soluciones para marcas y empresas de distintos perfiles dentro del ecosistema textil y comercial. Entre los nombres compartidos como referencia se encuentran:</p>
+      <div class="feature-list" style="margin-top: 32px;">
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text"><span class="accent-text">Cuidado con el Perro</span></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text"><span class="accent-text">Mala Hierba</span></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text"><span class="accent-text">KIDS</span></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text"><span class="accent-text">Coppel</span></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">y otros proyectos destacados del sector.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">9</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Por qué trabajar con DAJOMS -->
+  <div class="slide hidden" id="slide-9">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <h2>Por qué trabajar con DAJOMS</h2>
+      <p class="subtitle">Porque una buena etiqueta no sólo identifica: también posiciona.</p>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-title">Entendemos el equilibrio</div>
+          <div class="value-text">Combinamos estética, función y producción en cada solución.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-title">Soluciones adaptables</div>
+          <div class="value-text">Ofrecemos opciones para distintos tipos de marca y volumen.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-title">Atención al detalle</div>
+          <div class="value-text">Cuidamos los detalles que impactan la percepción final del producto.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-title">Relación de largo plazo</div>
+          <div class="value-text">Construimos vínculos con enfoque comercial y sostenible.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">10</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Presentación profesional -->
+  <div class="slide hidden" id="slide-10">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <h2>Una presentación profesional desde la primera entrega</h2>
+      <p class="subtitle">Nuestro trabajo acompaña la imagen con la que cada marca sale al mercado.</p>
+      <p class="body-text" style="margin-bottom: 28px;">Cuando una marca invierte en diseño, colección, producto y experiencia, necesita que cada componente esté a la altura. Las etiquetas, aplicaciones y piezas de identidad textil deben sostener esa misma percepción de valor.</p>
+      <p class="body-text" style="font-size: 20px; color: #FF81A0; font-weight: 600; margin-top: 40px;">En DAJOMS trabajamos para que esa coherencia se vea, se toque y se recuerde.</p>
+    </div>
+    <div class="slide-number">11</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Contacto y Cierre -->
+  <div class="slide hidden" id="slide-11">
+    <div class="slide-accent"></div>
+    <div class="slide-content">
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+        <h2 style="margin-bottom: 16px;">Listos para tu siguiente proyecto</h2>
+        <p class="subtitle" style="margin-bottom: 40px;">Conversemos sobre el tipo de etiqueta, acabado o solución que tu marca necesita.</p>
+        
+        <div class="contact-section">
+          <!-- CONTACTO 1: DANIELA -->
+          <div class="contact-card">
+            <div class="contact-name">Daniela Reyes Cázares</div>
+            <div class="contact-role">Business Manager</div>
+            <div class="contact-info-group">
+              <div>
+                <div class="contact-label">Teléfono Oficina</div>
+                <div class="contact-info">722-490-58-79</div>
+              </div>
+              <div>
+                <div class="contact-label">Celular</div>
+                <div class="contact-info">722-771-57-18</div>
+              </div>
+              <div>
+                <div class="contact-label">Correo</div>
+                <div class="contact-info">administracion@dajoms.com</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTACTO 2: MIGUEL -->
+          <div class="contact-card">
+            <div class="contact-name">Miguel Martínez Vázquez</div>
+            <div class="contact-role">Business Manager</div>
+            <div class="contact-info-group">
+              <div>
+                <div class="contact-label">Teléfono Oficina</div>
+                <div class="contact-info">722-490-58-79</div>
+              </div>
+              <div>
+                <div class="contact-label">Celular</div>
+                <div class="contact-info">722-771-57-18</div>
+              </div>
+              <div>
+                <div class="contact-label">Correo</div>
+                <div class="contact-info">administracion@dajoms.com</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-box" style="margin-top: 40px;">
+          <p class="cta-text">Podemos preparar una propuesta de acuerdo con tus requerimientos de diseño, aplicación, materiales, volumen y tiempos.</p>
+          <div class="cta-title">Solicita una cotización y empecemos a construir tu solución textil</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-number">12</div>
+    <div class="slide-logo">
+      <img src="assets/DAJOMSlogo.png" alt="DAJOMS" style="height: 20px;" />
+      <span class="slide-logo-text">DAJOMS GROUP</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentSlide = 0;
+const totalSlides = 12;
+
+function showSlide(n) {
+  // Hide all slides
+  document.querySelectorAll('.slide').forEach(slide => slide.classList.add('hidden'));
+  
+  // Show target slide
+  const slide = document.getElementById(`slide-${n}`);
+  if (slide) {
+    slide.classList.remove('hidden');
+    currentSlide = n;
+    document.getElementById('slide-num').textContent = n + 1;
+    
+    // Update active button
+    document.querySelectorAll('.controls button').forEach((btn, idx) => {
+      if (idx === n || (idx < 12 && n < 12)) btn.classList.remove('active');
+    });
+  }
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') showSlide(Math.min(currentSlide + 1, totalSlides - 1));
+  if (e.key === 'ArrowLeft') showSlide(Math.max(currentSlide - 1, 0));
+});
+
+// Initialize
+showSlide(0);
+</script>
+
+</body>
+</html>
