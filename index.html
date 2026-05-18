@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DAJOMS GROUP</title>
+  <meta name="description" content="DAJOMS GROUP · Etiquetas tejidas, impresas y soluciones de identidad textil para marcas, fabricantes y empresas." />
+  <link rel="canonical" href="https://dajoms.com/" />
+  <meta property="og:site_name" content="DAJOMS GROUP" />
+  <meta property="og:title" content="DAJOMS GROUP" />
+  <meta property="og:description" content="Etiquetas y soluciones de identidad textil para marcas, fabricantes y empresas." />
+  <meta property="og:url" content="https://dajoms.com/" />
+  <meta property="og:type" content="website" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -389,9 +396,15 @@ const Footer = ({ setPagina, accent }) => (
         <div>
           <h4 style={{ fontFamily: 'Montserrat', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Contacto</h4>
           <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 9 }}>contacto@dajoms.com</p>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 9 }}>+52 (55) 0000-0000</p>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 9 }}>+52 722 490 5879 / +52 722 771 5718</p>
+          <a href="https://dajoms.com/" target="_blank" rel="noreferrer" style={{ display: 'block', fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 9 }}>dajoms.com</a>
           <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: 18 }}>Lun–Vie 9:00–18:00</p>
-          <div style={{ background: '#25D366', borderRadius: 4, padding: '10px 18px', fontSize: 12, fontFamily: 'Montserrat', fontWeight: 700, display: 'inline-block', cursor: 'pointer', color: '#fff' }}>WhatsApp</div>
+          <a
+            href="https://wa.me/527224905879?text=Hola%20DAJOMS%20GROUP%2C%20me%20interesa%20una%20cotizaci%C3%B3n."
+            target="_blank"
+            rel="noreferrer"
+            style={{ background: '#25D366', borderRadius: 4, padding: '10px 18px', fontSize: 12, fontFamily: 'Montserrat', fontWeight: 700, display: 'inline-block', cursor: 'pointer', color: '#fff' }}
+          >WhatsApp</a>
         </div>
       </div>
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 22, display: 'flex', justifyContent: 'space-between' }}>
@@ -709,19 +722,19 @@ const PaginaContacto = ({ accent }) => {
         <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.7fr', gap: 64 }}>
           <div>
             <h2 style={{ fontFamily: 'Montserrat', fontSize: 20, fontWeight: 800, color: BASE.carbon, marginBottom: 28 }}>Información de contacto</h2>
-            {[{ t:'Correo electrónico', v:'contacto@dajoms.com' },{ t:'Teléfono', v:'+52 (55) 0000-0000' },{ t:'Horario de atención', v:'Lunes a Viernes\n9:00 – 18:00 hrs' }].map((item,i) => (
-              <div key={i} style={{ marginBottom: 24, paddingBottom: 24, borderBottom: i < 2 ? `1px solid ${BASE.grisClaro}` : 'none' }}>
+            {[{ t:'Correo electrónico', v:'contacto@dajoms.com' },{ t:'Teléfono', v:'+52 722 490 5879 / +52 722 771 5718' },{ t:'Sitio web', v:'dajoms.com' },{ t:'Horario de atención', v:'Lunes a Viernes\n9:00 – 18:00 hrs' }].map((item,i) => (
+              <div key={i} style={{ marginBottom: 24, paddingBottom: 24, borderBottom: i < 3 ? `1px solid ${BASE.grisClaro}` : 'none' }}>
                 <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: accent.accent, marginBottom: 7 }}>{item.t}</p>
                 <p style={{ fontSize: 14, color: BASE.carbon, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{item.v}</p>
               </div>
             ))}
-            <div style={{ background: '#25D366', borderRadius: 4, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', marginTop: 8 }}>
+            <a href="https://wa.me/527224905879?text=Hola%20DAJOMS%20GROUP%2C%20me%20interesa%20una%20cotizaci%C3%B3n." target="_blank" rel="noreferrer" style={{ background: '#25D366', borderRadius: 4, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', marginTop: 8 }}>
               <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#fff', fontSize: 14 }}>W</div>
               <div>
                 <p style={{ fontFamily: 'Montserrat', fontSize: 12, fontWeight: 700, color: '#fff' }}>Atención por WhatsApp</p>
                 <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>Respuesta rápida</p>
               </div>
-            </div>
+            </a>
           </div>
           <div>
             {enviado ? (

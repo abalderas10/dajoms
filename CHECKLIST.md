@@ -124,7 +124,7 @@ https://abalderas10.github.io/dajoms/carta-presentacion.html
 ## 💡 Próximos Pasos Opcionales
 
 1. **Dominio personalizado**
-   - Compra un dominio (ej: www.dajoms.com)
+   - Compra un dominio (ej: dajoms.com)
    - Configura DNS en tu registrador
    - Apunta a GitHub Pages / Vercel
 

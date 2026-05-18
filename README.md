@@ -87,7 +87,7 @@ dajoms/
 
 - **Email**: administracion@dajoms.com
 - **Teléfono**: 722-490-58-79 / 722-771-57-18
-- **Web**: www.dajoms.com
+- **Web**: dajoms.com
 
 ## 👥 Equipo
 
