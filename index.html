@@ -643,11 +643,19 @@ const ColorSelector = ({ accentKey, setAccentKey, size = 32 }) => {
 // ─── NAV ──────────────────────────────────────────────────────────────────────
 const Nav = ({ pagina, setPagina, accent, accentKey, setAccentKey, isMobile, isTablet }) => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', fn);
     return () => window.removeEventListener('scroll', fn);
   }, []);
+  useEffect(() => {
+    if (!isTablet) setMenuOpen(false);
+  }, [isTablet]);
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
 
   const links = [
     { id: 'home', label: 'Inicio' },
@@ -656,7 +664,7 @@ const Nav = ({ pagina, setPagina, accent, accentKey, setAccentKey, isMobile, isT
     { id: 'contacto', label: 'Contacto' },
   ];
 
-  const handleNav = (id) => { setPagina(id); window.scrollTo(0,0); };
+  const handleNav = (id) => { setPagina(id); setMenuOpen(false); window.scrollTo(0,0); };
 
   return (
     <header style={{
@@ -678,22 +686,121 @@ const Nav = ({ pagina, setPagina, accent, accentKey, setAccentKey, isMobile, isT
         gap: isTablet ? 12 : 0,
       }}>
         <div style={{ cursor: 'pointer' }} onClick={() => handleNav('home')}><Logo size={44} accent={accent} /></div>
-        <nav style={{ display: 'flex', gap: isMobile ? 10 : (isTablet ? 16 : 36), alignItems: 'center', flexWrap: isTablet ? 'wrap' : 'nowrap', justifyContent: isTablet ? 'space-between' : 'flex-end', width: isTablet ? '100%' : 'auto' }}>
-          {links.map(l => (
-            <button key={l.id} onClick={() => handleNav(l.id)} style={{
-              background: 'none', border: 'none',
-              fontFamily: 'Montserrat, sans-serif', fontSize: 12, fontWeight: 700,
-              letterSpacing: '0.09em', textTransform: 'uppercase',
-              color: pagina === l.id ? accent.accent : BASE.carbon,
-              borderBottom: pagina === l.id ? `2px solid ${accent.accent}` : '2px solid transparent',
-              padding: '4px 0', transition: 'all 0.2s', cursor: 'pointer',
-            }}>{l.label}</button>
-          ))}
-          {!isTablet && <div style={{ width: 1, height: 20, background: BASE.grisMedio }} />}
-          <ColorSelector accentKey={accentKey} setAccentKey={setAccentKey} size={isMobile ? 26 : 32} />
-          <Btn onClick={() => handleNav('contacto')} style={{ padding: isMobile ? '10px 14px' : '10px 22px', fontSize: 12 }} accent={accent}>Solicitar cotización</Btn>
-        </nav>
+
+        {isTablet ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <ColorSelector accentKey={accentKey} setAccentKey={setAccentKey} size={isMobile ? 26 : 30} />
+            <button
+              onClick={() => setMenuOpen(v => !v)}
+              aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 8,
+                border: `1px solid ${BASE.grisMedio}`,
+                background: '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 0,
+              }}
+            >
+              <div style={{ width: 18, height: 12, position: 'relative' }}>
+                <span style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 2, borderRadius: 2, background: BASE.carbon, opacity: menuOpen ? 0 : 1, transition: 'opacity 0.15s' }} />
+                <span style={{ position: 'absolute', left: 0, right: 0, top: 5, height: 2, borderRadius: 2, background: BASE.carbon, transform: menuOpen ? 'rotate(45deg)' : 'none', transformOrigin: 'center', transition: 'transform 0.15s' }} />
+                <span style={{ position: 'absolute', left: 0, right: 0, top: 5, height: 2, borderRadius: 2, background: BASE.carbon, transform: menuOpen ? 'rotate(-45deg)' : 'none', transformOrigin: 'center', transition: 'transform 0.15s' }} />
+                <span style={{ position: 'absolute', left: 0, right: 0, top: 10, height: 2, borderRadius: 2, background: BASE.carbon, opacity: menuOpen ? 0 : 1, transition: 'opacity 0.15s' }} />
+              </div>
+            </button>
+          </div>
+        ) : (
+          <nav style={{ display: 'flex', gap: 36, alignItems: 'center' }}>
+            {links.map(l => (
+              <button key={l.id} onClick={() => handleNav(l.id)} style={{
+                background: 'none', border: 'none',
+                fontFamily: 'Montserrat, sans-serif', fontSize: 12, fontWeight: 700,
+                letterSpacing: '0.09em', textTransform: 'uppercase',
+                color: pagina === l.id ? accent.accent : BASE.carbon,
+                borderBottom: pagina === l.id ? `2px solid ${accent.accent}` : '2px solid transparent',
+                padding: '4px 0', transition: 'all 0.2s', cursor: 'pointer',
+              }}>{l.label}</button>
+            ))}
+            <div style={{ width: 1, height: 20, background: BASE.grisMedio }} />
+            <ColorSelector accentKey={accentKey} setAccentKey={setAccentKey} size={32} />
+            <Btn onClick={() => handleNav('contacto')} style={{ padding: '10px 22px', fontSize: 12 }} accent={accent}>Solicitar cotización</Btn>
+          </nav>
+        )}
       </div>
+
+      {isTablet && menuOpen && (
+        <div
+          onClick={() => setMenuOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.35)',
+            zIndex: 900,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              height: '100%',
+              width: isMobile ? 'min(340px, 92vw)' : 'min(380px, 88vw)',
+              background: '#fff',
+              borderLeft: `1px solid ${BASE.grisMedio}`,
+              padding: isMobile ? 16 : 20,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 14,
+              overflowY: 'auto',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+              <p style={{ fontFamily: 'Montserrat', fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: BASE.carbonLight }}>Menú</p>
+              <button
+                onClick={() => setMenuOpen(false)}
+                style={{ width: 38, height: 38, borderRadius: 10, border: `1px solid ${BASE.grisMedio}`, background: '#fff', fontSize: 18, color: BASE.carbon }}
+              >×</button>
+            </div>
+
+            <div style={{ display: 'grid', gap: 10 }}>
+              {links.map(l => (
+                <button
+                  key={l.id}
+                  onClick={() => handleNav(l.id)}
+                  style={{
+                    width: '100%',
+                    textAlign: 'left',
+                    padding: '14px 14px',
+                    borderRadius: 10,
+                    border: `1px solid ${BASE.grisMedio}`,
+                    background: pagina === l.id ? accent.bg : '#fff',
+                    fontFamily: 'Montserrat, sans-serif',
+                    fontSize: 12,
+                    fontWeight: 800,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: BASE.carbon,
+                  }}
+                >{l.label}</button>
+              ))}
+            </div>
+
+            <div style={{ borderTop: `1px solid ${BASE.grisClaro}`, paddingTop: 14, marginTop: 4 }}>
+              <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: BASE.carbonLight, marginBottom: 10 }}>Color</p>
+              <ColorSelector accentKey={accentKey} setAccentKey={setAccentKey} size={28} />
+            </div>
+
+            <div style={{ marginTop: 6 }}>
+              <Btn onClick={() => handleNav('contacto')} style={{ width: '100%', padding: '14px 18px', fontSize: 12 }} accent={accent}>Solicitar cotización</Btn>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
