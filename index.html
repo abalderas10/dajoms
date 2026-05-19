@@ -253,6 +253,7 @@ const ProductCarousel = ({ accent, isMobile, isTablet }) => {
     { src: 'assets/products/p07.jpg', cliente: 'Malayerba', tipo: 'Hang Tag' },
     { src: 'assets/products/p09.jpg', cliente: 'CCP Kids', tipo: 'Hang Tags' },
     { src: 'assets/products/p10.jpg', cliente: 'JBE', tipo: 'Etiqueta tejida' },
+    { src: 'assets/photos/c4_men_blue.jpg', cliente: 'Detalle de etiqueta', tipo: 'Etiqueta tejida' },
   ];
 
   // Triplicate for seamless infinite loop
@@ -856,9 +857,9 @@ const PaginaHome = ({ setPagina, accent, accentKey, isMobile, isTablet, isSmallD
   const ctaTitleSize = isMobile ? 26 : (isTablet ? 32 : 38);
 
   const productos = [
-    { nombre: 'Etiquetas tejidas', desc: 'Alta definición en hilo jacquard' },
-    { nombre: 'Etiquetas impresas', desc: 'Nitidez y versatilidad total' },
-    { nombre: 'Hang Tags', desc: 'Presentación de colección' },
+    { nombre: 'Etiquetas tejidas', desc: 'Alta definición en hilo jacquard', img: 'p1' },
+    { nombre: 'Etiquetas impresas', desc: 'Nitidez y versatilidad total', img: 'p5' },
+    { nombre: 'Hang Tags', desc: 'Presentación de colección', img: 'p4' },
   ];
   const clientes = [
     { nombre: 'Cuidado con el Perro', src: 'assets/LOGOS/cuidado-con-el-perro-logo-png_seeklogo-480858.png' },
@@ -964,7 +965,7 @@ const PaginaHome = ({ setPagina, accent, accentKey, isMobile, isTablet, isSmallD
           <div style={{ display: 'grid', gridTemplateColumns: productosCols, gap: 20 }}>
             {productos.map((p,i) => (
               <div key={i} style={{ background: '#fff', borderRadius: 4, overflow: 'hidden', cursor: 'pointer', border: `1px solid ${BASE.grisMedio}` }} onClick={() => setPagina('productos')}>
-                <ImgPlaceholder code={`p${i+1}`} height={isMobile ? 160 : 180} accentKey={accentKey} style={{ borderRadius: 0 }} />
+                <ImgPlaceholder code={p.img} height={isMobile ? 160 : 180} accentKey={accentKey} style={{ borderRadius: 0 }} />
                 <div style={{ padding: '18px 18px' }}>
                   <h4 style={{ fontFamily: 'Montserrat', fontSize: 14, fontWeight: 700, color: BASE.carbon, marginBottom: 6 }}>{p.nombre}</h4>
                   <p style={{ fontSize: 12, color: BASE.carbonLight, marginBottom: 14 }}>{p.desc}</p>
