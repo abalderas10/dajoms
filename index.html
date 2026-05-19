@@ -65,11 +65,6 @@
     @media (max-width: 480px) {
       body { font-family: 'Inter', sans-serif; }
       
-      header { padding: 8px 12px; }
-      header div { padding: 0; height: auto; display: flex; flex-direction: column; }
-      header div > div:first-child { width: 100%; }
-      header div > div:first-child img { height: 28px; }
-      
       nav { 
         width: 100%;
         flex-direction: column;
@@ -678,18 +673,17 @@ const Nav = ({ pagina, setPagina, accent, accentKey, setAccentKey, isMobile, isT
         maxWidth: 1200,
         margin: '0 auto',
         padding: isMobile ? '10px 12px' : (isTablet ? '10px 20px' : '0 40px'),
-        height: isTablet ? 'auto' : 72,
+        height: 72,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        flexWrap: isTablet ? 'wrap' : 'nowrap',
-        gap: isTablet ? 12 : 0,
+        flexWrap: 'nowrap',
+        gap: 0,
       }}>
         <div style={{ cursor: 'pointer' }} onClick={() => handleNav('home')}><Logo size={44} accent={accent} /></div>
 
         {isTablet ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <ColorSelector accentKey={accentKey} setAccentKey={setAccentKey} size={isMobile ? 26 : 30} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 'auto' }}>
             <button
               onClick={() => setMenuOpen(v => !v)}
               aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
