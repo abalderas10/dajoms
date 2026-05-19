@@ -724,7 +724,13 @@ const PaginaHome = ({ setPagina, accent, accentKey }) => {
     { nombre: 'Etiquetas impresas', desc: 'Nitidez y versatilidad total' },
     { nombre: 'Hang Tags', desc: 'Presentación de colección' },
   ];
-  const clientes = ['Cuidado con el Perro','Mala Hierba','KIDS','Coppel','Marca E','Marca F'];
+  const clientes = [
+    { nombre: 'Cuidado con el Perro', src: 'assets/LOGOS/cuidado-con-el-perro-logo-png_seeklogo-480858.png' },
+    { nombre: 'Coppel', src: 'assets/LOGOS/33533b3f-grupo-coppel-logotipo.jpg' },
+    { nombre: 'CCP', src: 'assets/LOGOS/channels4_profile.jpg' },
+    { nombre: 'Malayerba', src: 'assets/LOGOS/Mobile1_6310121618.jpg' },
+    { nombre: 'Malayerba', src: 'assets/LOGOS/80e6cd208798887.Y3JvcCwyMjQyLDE3NTMsMTE2LDA.png' },
+  ];
   const valores = [
     { n:'01', t:'Precisión técnica', d:'Cada etiqueta se produce con estándares que garantizan consistencia desde el primer lote hasta el último.' },
     { n:'02', t:'Identidad de marca', d:'Convertimos los detalles de tu prenda en una herramienta de posicionamiento que comunica profesionalismo.' },
@@ -772,7 +778,11 @@ const PaginaHome = ({ setPagina, accent, accentKey }) => {
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ textAlign: 'center', fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: BASE.carbonLight, marginBottom: 24 }}>Marcas que confían en DAJOMS GROUP</p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 48, flexWrap: 'wrap', alignItems: 'center' }}>
-            {clientes.map(c => <div key={c} style={{ fontFamily: 'Montserrat', fontSize: 13, fontWeight: 700, color: BASE.grisMedio, letterSpacing: '0.07em' }}>{c}</div>)}
+            {clientes.map((c, i) => (
+              <div key={`${c.nombre}-${i}`} style={{ background: '#fff', border: `1px solid ${BASE.grisMedio}`, borderRadius: 6, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={c.src} alt={c.nombre} loading="lazy" style={{ height: 42, width: 160, objectFit: 'contain', display: 'block' }} />
+              </div>
+            ))}
           </div>
         </div>
       </section>
