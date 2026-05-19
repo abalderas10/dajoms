@@ -118,6 +118,19 @@
 <script type="text/babel">
 const { useState, useEffect, useRef, useCallback } = React;
 
+const useBreakpoints = () => {
+  const [width, setWidth] = useState(() => window.innerWidth || 1200);
+  useEffect(() => {
+    const onResize = () => setWidth(window.innerWidth || 1200);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  const isMobile = width <= 480;
+  const isTablet = width <= 768;
+  const isSmallDesktop = width <= 1024;
+  return { width, isMobile, isTablet, isSmallDesktop };
+};
+
 // ─── PALETA BASE ──────────────────────────────────────────────────────────────
 const BASE = {
   carbon: '#404042',
@@ -225,7 +238,7 @@ const ImgPlaceholder = ({ label, width = '100%', height = 280, style = {}, code 
 };
 
 // ─── PRODUCT CAROUSEL — Walking Gallery ─────────────────────────────────────
-const ProductCarousel = ({ accent }) => {
+const ProductCarousel = ({ accent, isMobile, isTablet }) => {
   const [offset, setOffset] = useState(0);
   const [paused, setPaused] = useState(false);
   const [lightbox, setLightbox] = useState(null);
@@ -251,6 +264,8 @@ const ProductCarousel = ({ accent }) => {
   const loop = [...items, ...items, ...items];
   const cardGap = 24;
   const cardStep = cardW + cardGap;
+  const sidePad = isMobile ? 16 : (isTablet ? 24 : 40);
+  const maskW = isMobile ? 64 : 120;
 
   // Responsive card width
   useEffect(() => {
@@ -382,16 +397,16 @@ const ProductCarousel = ({ accent }) => {
         style={{ position: 'relative', overflow: 'hidden', padding: '8px 0', cursor: isDragging ? 'grabbing' : 'grab', userSelect: 'none' }}
       >
         {/* Edge fade masks */}
-        <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 120, background: `linear-gradient(90deg, ${PHOTO_BG} 0%, rgba(243,243,242,0) 100%)`, zIndex: 2, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 120, background: `linear-gradient(270deg, ${PHOTO_BG} 0%, rgba(243,243,242,0) 100%)`, zIndex: 2, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: maskW, background: `linear-gradient(90deg, ${PHOTO_BG} 0%, rgba(243,243,242,0) 100%)`, zIndex: 2, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: maskW, background: `linear-gradient(270deg, ${PHOTO_BG} 0%, rgba(243,243,242,0) 100%)`, zIndex: 2, pointerEvents: 'none' }} />
 
         <div
           ref={trackRef}
           style={{
             display: 'flex',
             gap: cardGap,
-            paddingLeft: 40,
-            paddingRight: 40,
+            paddingLeft: sidePad,
+            paddingRight: sidePad,
             transform: `translateX(-${offset}px)`,
             willChange: 'transform',
           }}
@@ -593,7 +608,7 @@ const RotatingBackground = ({ images, interval = 7000, overlay = 0.88 }) => {
 };
 
 // ─── COLOR SELECTOR ─────────────────────────────────────────────────────────
-const ColorSelector = ({ accentKey, setAccentKey }) => {
+const ColorSelector = ({ accentKey, setAccentKey, size = 32 }) => {
   return (
     <div style={{
       display: 'flex',
@@ -608,8 +623,8 @@ const ColorSelector = ({ accentKey, setAccentKey }) => {
             onClick={() => setAccentKey(key)}
             title={scheme.label}
             style={{
-              width: 32,
-              height: 32,
+              width: size,
+              height: size,
               borderRadius: '50%',
               background: scheme.accent,
               border: isActive ? `3px solid ${BASE.carbon}` : '2px solid transparent',
@@ -626,7 +641,7 @@ const ColorSelector = ({ accentKey, setAccentKey }) => {
 };
 
 // ─── NAV ──────────────────────────────────────────────────────────────────────
-const Nav = ({ pagina, setPagina, accent, accentKey, setAccentKey }) => {
+const Nav = ({ pagina, setPagina, accent, accentKey, setAccentKey, isMobile, isTablet }) => {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
@@ -651,9 +666,19 @@ const Nav = ({ pagina, setPagina, accent, accentKey, setAccentKey }) => {
       backdropFilter: scrolled ? 'blur(8px)' : 'none',
       transition: 'all 0.3s',
     }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 40px', height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{
+        maxWidth: 1200,
+        margin: '0 auto',
+        padding: isMobile ? '10px 12px' : (isTablet ? '10px 20px' : '0 40px'),
+        height: isTablet ? 'auto' : 72,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: isTablet ? 'wrap' : 'nowrap',
+        gap: isTablet ? 12 : 0,
+      }}>
         <div style={{ cursor: 'pointer' }} onClick={() => handleNav('home')}><Logo size={44} accent={accent} /></div>
-        <nav style={{ display: 'flex', gap: 36, alignItems: 'center' }}>
+        <nav style={{ display: 'flex', gap: isMobile ? 10 : (isTablet ? 16 : 36), alignItems: 'center', flexWrap: isTablet ? 'wrap' : 'nowrap', justifyContent: isTablet ? 'space-between' : 'flex-end', width: isTablet ? '100%' : 'auto' }}>
           {links.map(l => (
             <button key={l.id} onClick={() => handleNav(l.id)} style={{
               background: 'none', border: 'none',
@@ -664,9 +689,9 @@ const Nav = ({ pagina, setPagina, accent, accentKey, setAccentKey }) => {
               padding: '4px 0', transition: 'all 0.2s', cursor: 'pointer',
             }}>{l.label}</button>
           ))}
-          <div style={{ width: 1, height: 20, background: BASE.grisMedio }} />
-          <ColorSelector accentKey={accentKey} setAccentKey={setAccentKey} />
-          <Btn onClick={() => handleNav('contacto')} style={{ padding: '10px 22px', fontSize: 12 }} accent={accent}>Solicitar cotización</Btn>
+          {!isTablet && <div style={{ width: 1, height: 20, background: BASE.grisMedio }} />}
+          <ColorSelector accentKey={accentKey} setAccentKey={setAccentKey} size={isMobile ? 26 : 32} />
+          <Btn onClick={() => handleNav('contacto')} style={{ padding: isMobile ? '10px 14px' : '10px 22px', fontSize: 12 }} accent={accent}>Solicitar cotización</Btn>
         </nav>
       </div>
     </header>
@@ -674,10 +699,10 @@ const Nav = ({ pagina, setPagina, accent, accentKey, setAccentKey }) => {
 };
 
 // ─── FOOTER ───────────────────────────────────────────────────────────────────
-const Footer = ({ setPagina, accent }) => (
-  <footer style={{ background: BASE.carbon, color: '#fff', padding: '64px 40px 32px' }}>
+const Footer = ({ setPagina, accent, isMobile, isTablet, isSmallDesktop }) => (
+  <footer style={{ background: BASE.carbon, color: '#fff', padding: isMobile ? '40px 16px 24px' : (isTablet ? '52px 20px 28px' : '64px 40px 32px') }}>
     <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isTablet ? '1fr' : (isSmallDesktop ? '1fr 1fr' : '2fr 1fr 1fr 1fr'), gap: isTablet ? 28 : 48, marginBottom: isTablet ? 28 : 48 }}>
         <div>
           <Logo size={40} inverted />
           <p style={{ fontSize: 13, lineHeight: 1.9, color: 'rgba(255,255,255,0.55)', maxWidth: 280, marginTop: 20 }}>
@@ -709,7 +734,7 @@ const Footer = ({ setPagina, accent }) => (
           >WhatsApp</a>
         </div>
       </div>
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 22, display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 22, display: 'flex', justifyContent: 'space-between', flexDirection: isTablet ? 'column' : 'row', gap: isTablet ? 10 : 0 }}>
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>© 2026 DAJOMS GROUP. Todos los derechos reservados.</p>
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>Identidad textil para marcas que cuidan cada detalle.</p>
       </div>
@@ -718,7 +743,17 @@ const Footer = ({ setPagina, accent }) => (
 );
 
 // ─── HOME ─────────────────────────────────────────────────────────────────────
-const PaginaHome = ({ setPagina, accent, accentKey }) => {
+const PaginaHome = ({ setPagina, accent, accentKey, isMobile, isTablet, isSmallDesktop }) => {
+  const heroCols = isTablet ? '1fr' : '1fr 1fr';
+  const heroGap = isTablet ? 44 : 80;
+  const heroPad = isMobile ? '56px 16px' : (isTablet ? '72px 20px' : '80px 40px');
+  const heroTitleSize = isMobile ? 30 : (isTablet ? 40 : 50);
+  const valoresCols = isTablet ? '1fr' : (isSmallDesktop ? 'repeat(2,1fr)' : 'repeat(3,1fr)');
+  const productosCols = isTablet ? '1fr' : (isSmallDesktop ? 'repeat(2,1fr)' : 'repeat(3,1fr)');
+  const institucionalCols = isTablet ? '1fr' : '1fr 1fr';
+  const sectionTitleSize = isMobile ? 26 : (isTablet ? 30 : 34);
+  const ctaTitleSize = isMobile ? 26 : (isTablet ? 32 : 38);
+
   const productos = [
     { nombre: 'Etiquetas tejidas', desc: 'Alta definición en hilo jacquard' },
     { nombre: 'Etiquetas impresas', desc: 'Nitidez y versatilidad total' },
@@ -741,13 +776,13 @@ const PaginaHome = ({ setPagina, accent, accentKey }) => {
     <div>
       {/* HERO */}
       <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: 72, background: BASE.blanco }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: heroPad, display: 'grid', gridTemplateColumns: heroCols, gap: heroGap, alignItems: 'center' }}>
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: BASE.grisClaro, borderRadius: 40, padding: '8px 18px', marginBottom: 32 }}>
               <div style={{ width: 7, height: 7, borderRadius: '50%', background: accent.accent }} />
               <span style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: BASE.carbonLight }}>Identidad textil profesional</span>
             </div>
-            <h1 style={{ fontFamily: 'Montserrat', fontSize: 50, fontWeight: 800, lineHeight: 1.1, color: BASE.carbon, marginBottom: 24, textWrap: 'pretty' }}>
+            <h1 style={{ fontFamily: 'Montserrat', fontSize: heroTitleSize, fontWeight: 800, lineHeight: 1.1, color: BASE.carbon, marginBottom: 24, textWrap: 'pretty' }}>
               Etiquetas que elevan la identidad de tu marca
             </h1>
             <LineaAcento accent={accent} style={{ marginBottom: 28 }} />
@@ -760,15 +795,19 @@ const PaginaHome = ({ setPagina, accent, accentKey }) => {
             </div>
           </div>
           <div style={{ position: 'relative' }}>
-            <ImgPlaceholder code="w1" height={460} accentKey={accentKey} style={{ borderRadius: 4 }} />
-            <div style={{ position: 'absolute', bottom: -20, left: -20, background: '#fff', border: `1px solid ${BASE.grisMedio}`, borderRadius: 4, padding: '18px 24px', boxShadow: '0 8px 32px rgba(0,0,0,0.07)' }}>
-              <div style={{ fontFamily: 'Montserrat', fontSize: 26, fontWeight: 800, color: BASE.carbon }}>+500</div>
-              <div style={{ fontFamily: 'Inter', fontSize: 12, color: BASE.carbonLight, marginTop: 2 }}>marcas atendidas</div>
-            </div>
-            <div style={{ position: 'absolute', top: 20, right: -20, background: accent.accent, borderRadius: 4, padding: '14px 18px' }}>
-              <div style={{ fontFamily: 'Montserrat', fontSize: 20, fontWeight: 800, color: '#fff' }}>15+</div>
-              <div style={{ fontFamily: 'Inter', fontSize: 11, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>años de experiencia</div>
-            </div>
+            <ImgPlaceholder code="w1" height={isMobile ? 320 : (isTablet ? 380 : 460)} accentKey={accentKey} style={{ borderRadius: 4 }} />
+            {!isMobile && (
+              <div style={{ position: 'absolute', bottom: -20, left: -20, background: '#fff', border: `1px solid ${BASE.grisMedio}`, borderRadius: 4, padding: '18px 24px', boxShadow: '0 8px 32px rgba(0,0,0,0.07)' }}>
+                <div style={{ fontFamily: 'Montserrat', fontSize: 26, fontWeight: 800, color: BASE.carbon }}>+500</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 12, color: BASE.carbonLight, marginTop: 2 }}>marcas atendidas</div>
+              </div>
+            )}
+            {!isMobile && (
+              <div style={{ position: 'absolute', top: 20, right: -20, background: accent.accent, borderRadius: 4, padding: '14px 18px' }}>
+                <div style={{ fontFamily: 'Montserrat', fontSize: 20, fontWeight: 800, color: '#fff' }}>15+</div>
+                <div style={{ fontFamily: 'Inter', fontSize: 11, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>años de experiencia</div>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -777,10 +816,10 @@ const PaginaHome = ({ setPagina, accent, accentKey }) => {
       <section style={{ background: BASE.grisClaro, padding: '36px 40px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ textAlign: 'center', fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: BASE.carbonLight, marginBottom: 24 }}>Marcas que confían en DAJOMS GROUP</p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 48, flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 14 : 32, flexWrap: 'wrap', alignItems: 'center' }}>
             {clientes.map((c, i) => (
-              <div key={`${c.nombre}-${i}`} style={{ background: '#fff', border: `1px solid ${BASE.grisMedio}`, borderRadius: 6, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src={c.src} alt={c.nombre} loading="lazy" style={{ height: 42, width: 160, objectFit: 'contain', display: 'block' }} />
+              <div key={`${c.nombre}-${i}`} style={{ background: '#fff', border: `1px solid ${BASE.grisMedio}`, borderRadius: 6, padding: isMobile ? '10px 12px' : '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={c.src} alt={c.nombre} loading="lazy" style={{ height: isMobile ? 32 : 42, width: isMobile ? 120 : 160, objectFit: 'contain', display: 'block' }} />
               </div>
             ))}
           </div>
@@ -797,9 +836,9 @@ const PaginaHome = ({ setPagina, accent, accentKey }) => {
         <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div style={{ textAlign: 'center', marginBottom: 60 }}>
             <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 14 }}>Por qué elegirnos</p>
-            <h2 style={{ fontFamily: 'Montserrat', fontSize: 34, fontWeight: 800, color: BASE.carbon }}>Soluciones textiles con precisión,<br />presencia y valor de marca</h2>
+            <h2 style={{ fontFamily: 'Montserrat', fontSize: sectionTitleSize, fontWeight: 800, color: BASE.carbon }}>Soluciones textiles con precisión,<br />presencia y valor de marca</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 36 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: valoresCols, gap: 36 }}>
             {valores.map((v,i) => (
               <div key={i} style={{ padding: '36px 32px', background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(6px)', border: `1px solid ${BASE.grisMedio}`, borderRadius: 4, borderTop: `3px solid ${accent.accent}`, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}>
                 <div style={{ fontFamily: 'Montserrat', fontSize: 28, fontWeight: 800, color: BASE.grisClaro, marginBottom: 16 }}>{v.n}</div>
@@ -814,17 +853,17 @@ const PaginaHome = ({ setPagina, accent, accentKey }) => {
       {/* PRODUCTOS PREVIEW */}
       <section style={{ padding: '96px 40px', background: BASE.grisClaro }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 52 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isTablet ? 'flex-start' : 'flex-end', marginBottom: 52, flexDirection: isTablet ? 'column' : 'row', gap: isTablet ? 16 : 0 }}>
             <div>
               <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 10 }}>Líneas de producto</p>
-              <h2 style={{ fontFamily: 'Montserrat', fontSize: 34, fontWeight: 800, color: BASE.carbon }}>Diseñadas para presentar<br />mejor cada prenda</h2>
+              <h2 style={{ fontFamily: 'Montserrat', fontSize: sectionTitleSize, fontWeight: 800, color: BASE.carbon }}>Diseñadas para presentar<br />mejor cada prenda</h2>
             </div>
             <Btn variant="secondary" onClick={() => setPagina('productos')} accent={accent}>Ver todos los productos</Btn>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: productosCols, gap: 20 }}>
             {productos.map((p,i) => (
               <div key={i} style={{ background: '#fff', borderRadius: 4, overflow: 'hidden', cursor: 'pointer', border: `1px solid ${BASE.grisMedio}` }} onClick={() => setPagina('productos')}>
-                <ImgPlaceholder code={`p${i+1}`} height={180} accentKey={accentKey} style={{ borderRadius: 0 }} />
+                <ImgPlaceholder code={`p${i+1}`} height={isMobile ? 160 : 180} accentKey={accentKey} style={{ borderRadius: 0 }} />
                 <div style={{ padding: '18px 18px' }}>
                   <h4 style={{ fontFamily: 'Montserrat', fontSize: 14, fontWeight: 700, color: BASE.carbon, marginBottom: 6 }}>{p.nombre}</h4>
                   <p style={{ fontSize: 12, color: BASE.carbonLight, marginBottom: 14 }}>{p.desc}</p>
@@ -837,25 +876,25 @@ const PaginaHome = ({ setPagina, accent, accentKey }) => {
       </section>
 
       {/* CARROUSEL DE PRODUCTOS REALES */}
-      <ProductCarousel accent={accent} />
+      <ProductCarousel accent={accent} isMobile={isMobile} isTablet={isTablet} />
 
       {/* INSTITUCIONAL */}
       <section style={{ padding: '96px 40px', background: BASE.carbon }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: institucionalCols, gap: isTablet ? 44 : 80, alignItems: 'center' }}>
           <div>
             <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Nuestra empresa</p>
-            <h2 style={{ fontFamily: 'Montserrat', fontSize: 32, fontWeight: 800, color: '#fff', lineHeight: 1.2, marginBottom: 22 }}>Más que etiquetas: identidad textil para marcas que cuidan cada detalle</h2>
+            <h2 style={{ fontFamily: 'Montserrat', fontSize: isMobile ? 24 : (isTablet ? 28 : 32), fontWeight: 800, color: '#fff', lineHeight: 1.2, marginBottom: 22 }}>Más que etiquetas: identidad textil para marcas que cuidan cada detalle</h2>
             <p style={{ fontSize: 14, lineHeight: 1.9, color: 'rgba(255,255,255,0.6)', marginBottom: 32 }}>
               Combinamos ejecución confiable, atención profesional y una estética limpia para crear soluciones textiles que proyectan orden, calidad e identidad de marca.
             </p>
             <Btn onClick={() => setPagina('nosotros')} accent={accent}>Conocer más</Btn>
           </div>
-          <ImgPlaceholder code="w2" height={380} accentKey={accentKey} style={{ borderRadius: 4, opacity: 0.85 }} />
+          <ImgPlaceholder code="w2" height={isMobile ? 260 : (isTablet ? 320 : 380)} accentKey={accentKey} style={{ borderRadius: 4, opacity: 0.85 }} />
         </div>
       </section>
 
       {/* CTA */}
-      <section style={{ position: 'relative', padding: '120px 40px', textAlign: 'center', overflow: 'hidden', background: '#0a0a0c' }}>
+      <section style={{ position: 'relative', padding: isMobile ? '88px 16px' : (isTablet ? '104px 20px' : '120px 40px'), textAlign: 'center', overflow: 'hidden', background: '#0a0a0c' }}>
         {/* Video background */}
         <video
           autoPlay
@@ -889,7 +928,7 @@ const PaginaHome = ({ setPagina, accent, accentKey }) => {
           <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>
             Listos para tu proyecto
           </p>
-          <h2 style={{ fontFamily: 'Montserrat', fontSize: 38, fontWeight: 800, color: '#fff', marginBottom: 18, lineHeight: 1.15, textWrap: 'pretty' }}>
+          <h2 style={{ fontFamily: 'Montserrat', fontSize: ctaTitleSize, fontWeight: 800, color: '#fff', marginBottom: 18, lineHeight: 1.15, textWrap: 'pretty' }}>
             Conversemos sobre la presentación de tu marca
           </h2>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.78)', marginBottom: 40, lineHeight: 1.85, maxWidth: 560, margin: '0 auto 40px' }}>
@@ -929,7 +968,10 @@ const PaginaHome = ({ setPagina, accent, accentKey }) => {
 };
 
 // ─── PRODUCTOS ────────────────────────────────────────────────────────────────
-const PaginaProductos = ({ setPagina, accent, accentKey }) => {
+const PaginaProductos = ({ setPagina, accent, accentKey, isMobile, isTablet, isSmallDesktop }) => {
+  const cardsCols = isTablet ? '1fr' : (isSmallDesktop ? 'repeat(2,1fr)' : 'repeat(3,1fr)');
+  const stepsCols = isMobile ? '1fr' : (isTablet ? 'repeat(2,1fr)' : 'repeat(4,1fr)');
+
   const cats = [
     { nombre: 'Etiquetas tejidas', desc: 'Producidas en telar jacquard de alta precisión. Disponibles en Tafeta, Tafeta Especial, Damasco. Cortes: recto, Térmico, Paloma y Medio. Ideales para marcas que buscan textura y durabilidad.' },
     { nombre: 'Etiquetas impresas', desc: 'Impresión en flexografía sobre diferentes materiales: Tafetán, satín y algodón.  Personalizadas en tamaño, forma y contenido.' },
@@ -948,7 +990,7 @@ const PaginaProductos = ({ setPagina, accent, accentKey }) => {
 
       <section style={{ padding: '72px 40px', background: BASE.blanco }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 28 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: cardsCols, gap: 28 }}>
             {cats.map((cat,i) => (
               <div key={i} style={{ border: `1px solid ${BASE.grisMedio}`, borderRadius: 4, overflow: 'hidden' }}>
                 <ImgPlaceholder code={`c${i+1}`} height={200} accentKey={accentKey} style={{ borderRadius: 0 }} />
@@ -970,7 +1012,7 @@ const PaginaProductos = ({ setPagina, accent, accentKey }) => {
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 12 }}>Cómo trabajamos</p>
           <h2 style={{ fontFamily: 'Montserrat', fontSize: 30, fontWeight: 800, color: BASE.carbon, marginBottom: 48 }}>Del concepto a la entrega</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: stepsCols, gap: 24 }}>
             {['Consulta y cotización','Diseño y aprobación','Producción controlada','Entrega y seguimiento'].map((paso,i) => (
               <div key={i}>
                 <div style={{ width: 52, height: 52, borderRadius: '50%', background: '#fff', border: `2px solid ${accent.accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontFamily: 'Montserrat', fontWeight: 800, fontSize: 16, color: accent.accent }}>{i+1}</div>
@@ -991,7 +1033,12 @@ const PaginaProductos = ({ setPagina, accent, accentKey }) => {
 };
 
 // ─── NOSOTROS ─────────────────────────────────────────────────────────────────
-const PaginaNosotros = ({ setPagina, accent, accentKey }) => {
+const PaginaNosotros = ({ setPagina, accent, accentKey, isMobile, isTablet, isSmallDesktop }) => {
+  const twoCol = isTablet ? '1fr' : '1fr 1fr';
+  const valuesCols = isTablet ? '1fr' : (isSmallDesktop ? 'repeat(2,1fr)' : 'repeat(3,1fr)');
+  const numbersCols = isTablet ? 'repeat(2,1fr)' : 'repeat(4,1fr)';
+  const gap2 = isTablet ? 44 : 80;
+
   const valores = [
     { t: 'Precisión', d: 'Cada proceso garantiza consistencia y calidad en cada lote de producción.' },
     { t: 'Compromiso', d: 'Plazos claros, comunicación directa y disposición total para resolver cada detalle.' },
@@ -1001,14 +1048,14 @@ const PaginaNosotros = ({ setPagina, accent, accentKey }) => {
   return (
     <div>
       <section style={{ background: BASE.blanco, padding: '140px 40px 72px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: twoCol, gap: gap2, alignItems: 'center' }}>
           <div>
             <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Nuestra historia</p>
-            <h1 style={{ fontFamily: 'Montserrat', fontSize: 40, fontWeight: 800, color: BASE.carbon, lineHeight: 1.15, marginBottom: 20 }}>Más que etiquetas: identidad textil para marcas que cuidan cada detalle</h1>
+            <h1 style={{ fontFamily: 'Montserrat', fontSize: isMobile ? 28 : (isTablet ? 34 : 40), fontWeight: 800, color: BASE.carbon, lineHeight: 1.15, marginBottom: 20 }}>Más que etiquetas: identidad textil para marcas que cuidan cada detalle</h1>
             <LineaAcento accent={accent} style={{ marginBottom: 24 }} />
             <p style={{ fontSize: 15, lineHeight: 1.9, color: BASE.carbonLight }}>DAJOMS GROUP nació de la convicción de que la presentación de una prenda es tan importante como su confección. Desde nuestros inicios, nos especializamos en entender las necesidades específicas de cada marca para ofrecer soluciones textiles que refuercen su identidad desde el primer contacto visual.</p>
           </div>
-          <ImgPlaceholder code="w3" height={420} accentKey={accentKey} style={{ borderRadius: 4 }} />
+          <ImgPlaceholder code="w3" height={isMobile ? 260 : (isTablet ? 340 : 420)} accentKey={accentKey} style={{ borderRadius: 4 }} />
         </div>
       </section>
 
@@ -1018,7 +1065,7 @@ const PaginaNosotros = ({ setPagina, accent, accentKey }) => {
             <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 10 }}>Lo que nos define</p>
             <h2 style={{ fontFamily: 'Montserrat', fontSize: 30, fontWeight: 800, color: BASE.carbon }}>Nuestros valores de trabajo</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 28 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: valuesCols, gap: 28 }}>
             {valores.map((v,i) => (
               <div key={i} style={{ background: '#fff', padding: '36px 28px', borderRadius: 4, borderBottom: `3px solid ${accent.accent}` }}>
                 <h3 style={{ fontFamily: 'Montserrat', fontSize: 19, fontWeight: 800, color: BASE.carbon, marginBottom: 14 }}>{v.t}</h3>
@@ -1030,8 +1077,8 @@ const PaginaNosotros = ({ setPagina, accent, accentKey }) => {
       </section>
 
       <section style={{ padding: '72px 40px', background: BASE.blanco }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
-          <ImgPlaceholder code="w4" height={400} accentKey={accentKey} style={{ borderRadius: 4 }} />
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: twoCol, gap: gap2, alignItems: 'center' }}>
+          {!isTablet && <ImgPlaceholder code="w4" height={400} accentKey={accentKey} style={{ borderRadius: 4 }} />}
           <div>
             <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Proceso de trabajo</p>
             <h2 style={{ fontFamily: 'Montserrat', fontSize: 28, fontWeight: 800, color: BASE.carbon, marginBottom: 28, lineHeight: 1.2 }}>Calidad garantizada en cada etapa</h2>
@@ -1042,13 +1089,14 @@ const PaginaNosotros = ({ setPagina, accent, accentKey }) => {
               </div>
             ))}
           </div>
+          {isTablet && <ImgPlaceholder code="w4" height={isMobile ? 260 : 340} accentKey={accentKey} style={{ borderRadius: 4 }} />}
         </div>
       </section>
 
       <section style={{ padding: '72px 40px', background: BASE.carbon, textAlign: 'center' }}>
         <div style={{ maxWidth: 880, margin: '0 auto' }}>
           <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent.accent, marginBottom: 22 }}>En números</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 40, marginBottom: 48 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: numbersCols, gap: isMobile ? 22 : 40, marginBottom: 48 }}>
             {[{n:'+500',l:'Marcas atendidas'},{n:'15+',l:'Años de experiencia'},{n:'5',l:'Líneas de producto'},{n:'100%',l:'Compromiso con calidad'}].map((s,i) => (
               <div key={i}>
                 <div style={{ fontFamily: 'Montserrat', fontSize: 36, fontWeight: 800, color: '#fff' }}>{s.n}</div>
@@ -1064,7 +1112,7 @@ const PaginaNosotros = ({ setPagina, accent, accentKey }) => {
 };
 
 // ─── CONTACTO ─────────────────────────────────────────────────────────────────
-const PaginaContacto = ({ accent }) => {
+const PaginaContacto = ({ accent, isMobile, isTablet }) => {
   const [form, setForm] = useState({ nombre:'', empresa:'', email:'', telefono:'', producto:'', mensaje:'' });
   const [enviado, setEnviado] = useState(false);
   const [errors, setErrors] = useState({});
@@ -1089,7 +1137,7 @@ const PaginaContacto = ({ accent }) => {
 
   return (
     <div>
-      <section style={{ position: 'relative', padding: '160px 40px 96px', textAlign: 'center', overflow: 'hidden', background: '#0a0a0c' }}>
+      <section style={{ position: 'relative', padding: isMobile ? '120px 16px 72px' : (isTablet ? '140px 20px 88px' : '160px 40px 96px'), textAlign: 'center', overflow: 'hidden', background: '#0a0a0c' }}>
         {/* Video background */}
         <video
           autoPlay
@@ -1121,13 +1169,13 @@ const PaginaContacto = ({ accent }) => {
         {/* Content */}
         <div style={{ maxWidth: 680, margin: '0 auto', position: 'relative', zIndex: 2 }}>
           <p style={{ fontFamily: 'Montserrat', fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: accent.accent, marginBottom: 18 }}>Estamos aquí para ayudarte</p>
-          <h1 style={{ fontFamily: 'Montserrat', fontSize: 44, fontWeight: 800, color: '#fff', marginBottom: 18, lineHeight: 1.15, textWrap: 'pretty' }}>Conversemos sobre la presentación de tu marca</h1>
+          <h1 style={{ fontFamily: 'Montserrat', fontSize: isMobile ? 30 : (isTablet ? 38 : 44), fontWeight: 800, color: '#fff', marginBottom: 18, lineHeight: 1.15, textWrap: 'pretty' }}>Conversemos sobre la presentación de tu marca</h1>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.82)', maxWidth: 480, margin: '0 auto', lineHeight: 1.8 }}>Cuéntanos tu proyecto y en breve un asesor se pondrá en contacto contigo.</p>
         </div>
       </section>
 
       <section style={{ padding: '72px 40px', background: BASE.blanco }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.7fr', gap: 64 }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: isTablet ? '1fr' : '1fr 1.7fr', gap: isTablet ? 32 : 64 }}>
           <div>
             <h2 style={{ fontFamily: 'Montserrat', fontSize: 20, fontWeight: 800, color: BASE.carbon, marginBottom: 28 }}>Información de contacto</h2>
             {[{ t:'Correo electrónico', v:'contacto@dajoms.com' },{ t:'Teléfono', v:'+52 722 490 5879 / +52 722 771 5718' },{ t:'Sitio web', v:'dajoms.com' },{ t:'Horario de atención', v:'Lunes a Viernes\n9:00 – 18:00 hrs' }].map((item,i) => (
@@ -1154,11 +1202,11 @@ const PaginaContacto = ({ accent }) => {
             ) : (
               <form onSubmit={handleSubmit} noValidate>
                 <h2 style={{ fontFamily: 'Montserrat', fontSize: 20, fontWeight: 800, color: BASE.carbon, marginBottom: 28 }}>Solicitar cotización</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginBottom: 18 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 18, marginBottom: 18 }}>
                   <div><label style={lbl}>Nombre completo *</label><input name="nombre" value={form.nombre} onChange={handleChange} style={inp('nombre')} placeholder="Tu nombre" /></div>
                   <div><label style={lbl}>Empresa / Marca</label><input name="empresa" value={form.empresa} onChange={handleChange} style={inp('empresa')} placeholder="Nombre de tu empresa" /></div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, marginBottom: 18 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 18, marginBottom: 18 }}>
                   <div><label style={lbl}>Correo electrónico *</label><input name="email" type="email" value={form.email} onChange={handleChange} style={inp('email')} placeholder="tu@correo.com" /></div>
                   <div><label style={lbl}>Teléfono</label><input name="telefono" value={form.telefono} onChange={handleChange} style={inp('telefono')} placeholder="+52 55 0000 0000" /></div>
                 </div>
@@ -1189,6 +1237,7 @@ const App = () => {
   const [pagina, setPaginaRaw] = useState(() => localStorage.getItem('dajoms_page') || 'home');
   const [accentKey, setAccentKeyRaw] = useState(() => localStorage.getItem('dajoms_accent') || 'azul');
   const [tweaksVisible, setTweaksVisible] = useState(false);
+  const { isMobile, isTablet, isSmallDesktop } = useBreakpoints();
 
   const TWEAK_DEFAULS = /*EDITMODE-BEGIN*/{
     "accentColor": "#5B9BD5",
@@ -1218,19 +1267,19 @@ const App = () => {
 
   const renderPage = () => {
     switch(pagina) {
-      case 'home': return <PaginaHome setPagina={setPagina} accent={accent} accentKey={accentKey} />;
-      case 'productos': return <PaginaProductos setPagina={setPagina} accent={accent} accentKey={accentKey} />;
-      case 'nosotros': return <PaginaNosotros setPagina={setPagina} accent={accent} accentKey={accentKey} />;
-      case 'contacto': return <PaginaContacto accent={accent} />;
-      default: return <PaginaHome setPagina={setPagina} accent={accent} accentKey={accentKey} />;
+      case 'home': return <PaginaHome setPagina={setPagina} accent={accent} accentKey={accentKey} isMobile={isMobile} isTablet={isTablet} isSmallDesktop={isSmallDesktop} />;
+      case 'productos': return <PaginaProductos setPagina={setPagina} accent={accent} accentKey={accentKey} isMobile={isMobile} isTablet={isTablet} isSmallDesktop={isSmallDesktop} />;
+      case 'nosotros': return <PaginaNosotros setPagina={setPagina} accent={accent} accentKey={accentKey} isMobile={isMobile} isTablet={isTablet} isSmallDesktop={isSmallDesktop} />;
+      case 'contacto': return <PaginaContacto accent={accent} isMobile={isMobile} isTablet={isTablet} />;
+      default: return <PaginaHome setPagina={setPagina} accent={accent} accentKey={accentKey} isMobile={isMobile} isTablet={isTablet} isSmallDesktop={isSmallDesktop} />;
     }
   };
 
   return (
     <div style={{ minHeight: '100vh' }}>
-      <Nav pagina={pagina} setPagina={setPagina} accent={accent} accentKey={accentKey} setAccentKey={setAccentKey} />
+      <Nav pagina={pagina} setPagina={setPagina} accent={accent} accentKey={accentKey} setAccentKey={setAccentKey} isMobile={isMobile} isTablet={isTablet} />
       <main>{renderPage()}</main>
-      <Footer setPagina={setPagina} accent={accent} />
+      <Footer setPagina={setPagina} accent={accent} isMobile={isMobile} isTablet={isTablet} isSmallDesktop={isSmallDesktop} />
 
       {/* TWEAKS */}
       {tweaksVisible && (
